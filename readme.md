@@ -1,0 +1,62 @@
+# very_useful_bot
+
+這是一個非常有用的Discord機器人，能為你的Discord伺服器增添光彩，他可以做到以下事項
+
+
+- #### 頂級數學機器人
+    **[10個指令](manual/math.md)**  
+    涵蓋了國、高中數學，幫你計算一些你算都不想再算的東西，例如約分分數、行列式、向量的內外積等。
+
+- #### 幫你決定要吃什麼
+    **[2個指令](manual/eat.md)**  
+    還在為下一餐吃什麼而煩惱嗎? 那你一定要試試整個機器人裡面最實用的指令。
+
+- #### 記住誰欠你多少錢
+    **[3個指令](manual/money.md)**  
+    別人欠你多少錢都不知道? 簡單紀錄你借出去多少錢。
+
+
+- #### 簡單的運氣小遊戲
+    **[6個指令](manual/yazy.md)**  
+    Yazy，一個骰子比大小遊戲。
+
+## 安裝說明
+請自行找一台電腦作為伺服器，效能不用理會，然後按照[設定步驟 (尚未完成)]()來架設你的Discord機器人伺服器。
+
+## 所有指令說明
+我們採用了Discord最新黑科技 - 斜線指令 `/`  
+只要輸入 `/` ，就有簡易的指令說明  
+輸入`/vubhelp`會產生Github連結，導向這個頁面
+
+#### A
+[`/average`](manual/math.md#average-items)
+#### C
+`/c`
+#### D
+[`/det2`](manual/math.md#det2-a1-a2-b1-b2)
+[`/det3`](manual/math.md#det3-a1-a2-a3-b1-b2-b3-c1-c2-c3)
+[`/dice`](manual/math.md#dice-faces)
+#### E
+[`/eat`](manual/eat.md#eat)
+#### G
+[`/gowhere`](manual/eat.md#gowhere)
+#### M
+[`/mborrow`](manual/money.md#mborrow-user-amount)
+[`/mdelete`](manual/money.md#mdelete-option)
+[`/mhistory`](manual/money.md#mhistory)
+#### P
+`/p`
+#### R
+[`/rand`](manual/math.md#rand-items)
+#### S
+[`/surface`](manual/math.md#surface-nx-ny-nz-x-y-z)
+#### V
+[`/vector`](manual/math.md#vector-x0-y0-z0-action-x1-y1-z1)
+[`/vubhelp`](#所有指令說明)
+#### Y
+`/yazychoose`
+`/yazyhold`
+`/yazyreset`
+`/yazyroll`
+`/yazyscore`
+`/yazystart`

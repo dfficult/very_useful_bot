@@ -1,0 +1,13 @@
+{
+    "example": [
+        {
+            "year": 20,
+            "month": 3,
+            "date": 31,
+            "hour": 20,
+            "minute": 30,
+            "name": "example2",
+            "amount": 100
+        }
+    ]
+}
