@@ -4,20 +4,19 @@
 
 
 - #### 頂級數學機器人
-    **[10個指令](manual/math.md)**  
+    **[試試看](manual/math.md)**  
     涵蓋了國、高中數學，幫你計算一些你算都不想再算的東西，例如約分分數、行列式、向量的內外積等。
 
 - #### 幫你決定要吃什麼
-    **[2個指令](manual/eat.md)**  
+    **[試試看](manual/eat.md)**  
     還在為下一餐吃什麼而煩惱嗎? 那你一定要試試整個機器人裡面最實用的指令。
 
 - #### 記住誰欠你多少錢
-    **[3個指令](manual/money.md)**  
+    **[試試看](manual/money.md)**  
     別人欠你多少錢都不知道? 簡單紀錄你借出去多少錢。
 
-
 - #### 簡單的運氣小遊戲
-    **[6個指令](manual/yazy.md)**  
+    **[試試看]()**  
     Yazy，一個骰子比大小遊戲。
 
 ## 安裝說明
@@ -50,8 +49,11 @@
 [`/rand`](manual/math.md#rand-items)
 #### S
 [`/surface`](manual/math.md#surface-nx-ny-nz-x-y-z)
+#### T
+[`/today`](manual/others.md#today)
 #### V
 [`/vector`](manual/math.md#vector-x0-y0-z0-action-x1-y1-z1)
+[`/vectorl`](manual/math.md#vectorl-x-y-z)
 [`/vubhelp`](#所有指令說明)
 #### Y
 `/yazychoose`

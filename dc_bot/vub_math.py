@@ -10,9 +10,14 @@ import math2 as m
 @app_commands.command(name="simfrac", description="[分數] 約分分數")
 @app_commands.describe(a="分子", b="分母")
 async def simfrac(interaction: discord.Interaction, a: int, b: int):
-    frac: m.Fraction = m.Fraction(a,b).simplify()
+    frac: m.Fraction = m.Fraction(a,b)
+    frac.simplify()
+    if frac.b == 1:
+        t = f"約分：{frac.a}"
+    else:
+        t = f"約分：{frac.a} / {frac.b}"
     embed = discord.Embed(
-        title=f"約分：{frac.a} / {frac.b}",
+        title=t,
         description=f"原分數：{a} / {b}",
         color=discord.Color.green()
     )
@@ -186,9 +191,9 @@ async def c(interaction: discord.Interaction, n: int, k: int):
 )
 @app_commands.choices(
         action=[
-                Choice(name="to (計算兩點之向量)", value="to"),
-                Choice(name="dot (內積)", value="dot"),
-                Choice(name="cross (外積)", value="cross")
+                Choice(name="to", value="to"),
+                Choice(name="dot", value="dot"),
+                Choice(name="cross", value="cross")
         ]
 )
 async def vector(
@@ -205,8 +210,17 @@ async def vector(
         case "to":
             # 計算向量
             ab = (x1-x0, y1-y0, z1-z0)
+            length = m.sim_sqrt(ab[0]*ab[0]+ab[1]*ab[1]+ab[2]*ab[2])
+            if length[0] == 1:
+                t = f"向量長度：√{length[1]}"
+            elif length[1] == 1:
+                t = f"向量長度：{length[1]}"
+            else:
+                t = f"向量長度：{length[0]}√{length[1]}"
+
             embed = discord.Embed(
                 title=f"AB向量：{ab}",
+                description=t,
                 color=discord.Color.green()
             )
             embed.add_field(name="A點", value=a, inline=True)
@@ -232,13 +246,40 @@ async def vector(
                 z0*x1 - x0*z1,
                 x0*y1 - y0*x1
             ]
+            length = m.sim_sqrt(o[0]*o[0]+o[1]*o[1]+o[2]*o[2])
+            if length[0] == 1:
+                t = f"向量長度：√{length[1]}"
+            elif length[1] == 1:
+                t = f"向量長度：{length[1]}"
+            else:
+                t = f"向量長度：{length[0]}√{length[1]}"
+
             embed = discord.Embed(
                 title=f"外積：({o[0]}, {o[1]}, {o[2]})",
+                description=t,
                 color=discord.Color.green()
             )
             embed.add_field(name="A向量", value=a, inline=True)
             embed.add_field(name="B向量", value=b, inline=True)
             await interaction.response.send_message(embed=embed)
+
+@app_commands.command(name="vectorl", description="[向量] 計算向量的長度")
+@app_commands.describe(x="x值",y="y值",z="z值 (若為平面向量，輸入0)")
+async def vectorl(interaction: discord.Interaction, x: int, y: int, z: int):
+        length = m.sim_sqrt(x*x + y*y + z*z)
+        if length[0] == 1:
+            t = f"向量長度：√{length[1]}"
+        elif length[1] == 1:
+            t = f"向量長度：{length[1]}"
+        else:
+            t = f"向量長度：{length[0]}√{length[1]}"
+
+        embed = discord.Embed(
+            title=t,
+            color=discord.Color.green()
+        )
+        embed.add_field(name="向量", value=f"({x}, {y}, {z})", inline=True)
+        await interaction.response.send_message(embed=embed)  
 
 # 平面
 @app_commands.command(name="surface", description="[平面] 給一法向量與平面上一點，求出該平面的一般式")

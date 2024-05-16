@@ -1,13 +1,23 @@
 import discord
 from discord.ext import commands
-from eat import *
-from vub_math import *
-from money import *
-from yazy import *
-from others import *
+try:
+    from eat import *
+    from vub_math import *
+    from money import *
+    from yazy import *
+    from dates import *
+except Exception as e:
+    print("Try running 'main.py' again in the '/dc_bot' directory")
+    input("Press Enter to exit ...")
+    exit()
 
-TOKEN = "TOKEN"  # 換成你的TOKEN
+TOKEN = "TOKEN"
 PREFIX = "!"
+
+if TOKEN == "TOKEN":
+    x = input("Token is not specified, enter your token or leave it blank to exit: ")
+    if x == '': exit()
+    else: TOKEN = x
 
 # Create bot instance
 bot = commands.Bot(command_prefix=PREFIX,intents=discord.Intents.all())
@@ -18,8 +28,8 @@ async def on_ready():
     print(f"已登入：{bot.user}")
     print(f"已載入 {len(slash)} 個指令")
     # await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=""))
-    # await bot.change_presence(activity=discord.Game(name="Grand Theft Auto VI"))
-    # await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="Never Gonna Give You Up"))
+    # await bot.change_presence(activity=discord.Game(name=""))
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="Never Gonna Give You Up"))
 
 
 @bot.event
@@ -30,9 +40,13 @@ async def on_message(message):
         await message.channel.send("Hello World!")
     
 # Commands
-@bot.command()
-async def vubhelp(ctx):
-    await ctx.send("https://www.github.com/dfficult/very_useful_bot")
+@app_commands.command(name="vubhelp", description="所有指令說明")
+async def vubhelp(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="歡迎使用 VeryUsefulBot",
+        description="前往指令列表 ➡️ https://www.github.com/dfficult/very_useful_bot"
+    )
+    await interaction.response.send_message(embed=embed)
 
 @bot.command()
 async def change_status(ctx, *type, **status):
@@ -46,7 +60,10 @@ async def change_status(ctx, *type, **status):
     await ctx.send(f"Changed to [{type}] [{status}]")
 
 
-bot.tree.add_command(which_day_next_sun)
+bot.tree.add_command(vubhelp)
+
+bot.tree.add_command(today)
+
 bot.tree.add_command(eat)
 bot.tree.add_command(addfood)
 
@@ -56,6 +73,7 @@ bot.tree.add_command(simfrac)
 bot.tree.add_command(rand)
 bot.tree.add_command(dice)
 bot.tree.add_command(vector)
+bot.tree.add_command(vectorl)
 bot.tree.add_command(surface)
 bot.tree.add_command(average)
 bot.tree.add_command(det3)

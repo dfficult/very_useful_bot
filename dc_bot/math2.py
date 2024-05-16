@@ -184,4 +184,4 @@ def sim_sqrt(num: int) -> list:
 	return s
 
 
-print(cleanup("3x-5+9+2y=7-5y"))
+# print(cleanup("3x-5+9+2y=7-5y"))
