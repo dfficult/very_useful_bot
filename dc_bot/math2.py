@@ -13,6 +13,9 @@ class Fraction:
 		gcd = math.gcd(self.a, self.b)
 		self.a = self.a // gcd
 		self.b = self.b // gcd
+		if self.a < 0 and self.b < 0:
+			self.a = -self.a
+			self.b = -self.b
 	def add(self, to_add) -> None:
 		self.a = self.a*to_add.b + to_add.a*self.b
 		self.b = self.b*to_add.b
@@ -41,16 +44,16 @@ def cleanup(eq: str) -> list:
 	
 	# find variables
 	vars = []
-	non_vars = "1234567890=+-*/×÷√><."
+	non_vars = "1234567890=+-*/×÷<>"
 	for i in eq:
 		if i not in non_vars and i not in vars:
 			vars.append(i)
-	if len(vars) in [1,2]:
+	if len(vars) in [1,2,3]:
 		pass
 	elif len(vars) == 0:
 		raise TypeError("No variables entered into the function")
 	else:
-		raise TypeError("Too many variables (Maximum two, and the max length of a var is 1)")
+		raise TypeError("Too many variables (Maximum three, and the max length of a var is 1)")
 	
 	# seperate left and right
 	left = []
@@ -127,10 +130,11 @@ def cleanup(eq: str) -> list:
 				
 
 # 二元一次聯立方程式
-def solve_21(eq1: str, eq2: str) -> list[str]:
+def solve_21(eq1: str, eq2: str) -> dict:
 	e1 = cleanup(eq1)
 	e2 = cleanup(eq2)
-	
+	# cleanup example: [{'x': 3, 'y': 2}, 5]
+
 	# { a1x + b1y = c1
 	# { a2x + b2y = c2
 	# 
@@ -139,10 +143,96 @@ def solve_21(eq1: str, eq2: str) -> list[str]:
 	# 
 	# D!=0 -> x=Dx/D, y=Dy/D
 	# D=0, Dx=0, Dy=0 -> 無限多解
-	# D=0, Dx^2+Dy^2!=0 -> 無解
+	# D=0, Dx^2+Dy^2 != 0 -> 無解
 	
+	for i in list(e1[0].keys()):
+		if i not in list(e2[0].keys()): e2[0][f"{i}"] = 0
+	for i in list(e2[0].keys()):
+		if i not in list(e1[0].keys()): e1[0][f"{i}"] = 0
+	if len(e1[0]) != 2 and len(e2[0]) != 2:
+		raise TypeError("Too many variables")
+	v = list(e1[0].keys())
+	a1 = e1[0][v[0]]
+	b1 = e1[0][v[1]]
+	c1 = e1[1]
+	a2 = e2[0][v[0]]
+	b2 = e2[0][v[1]]
+	c2 = e2[1]
+	d = int(a1*b2-b1*a2)
+	dx = int(c1*b2-b1*c2)
+	dy = int(a1*c2-c1*a2)
+
+	if d == 0 and dx*dx + dy*dy != 0:
+		return {f'{v[0]}': False, f'{v[1]}': False}
+	elif d == 0 and dx ==0 and dy == 0:
+		return {f'{v[0]}': True, f'{v[1]}': True}
+	else:
+		if dx % d == 0: x = dx/d
+		else: x = Fraction(dx, d); x.simplify()
+		if dy % d == 0: y = dy/d
+		else: y = Fraction(dy, d); y.simplify()
+		return {f'{v[0]}': x, f'{v[1]}': y}
 
 
+# 三元一次聯立方程式
+def solve_31(eq1: str, eq2: str, eq3: str) -> dict:
+	e1 = cleanup(eq1)
+	e2 = cleanup(eq2)
+	e3 = cleanup(eq3)
+	# cleanup example: [{'x': 3, 'y': 2, 'z': 1}, 6]
+
+	# { a1x + b1y + c1z = d1
+	# { a2x + b2y + c2z = d2
+	# { a3x + b3y + c3z = d3
+	# 
+	# D=|a1 b1 c1|, Dx=|d1 b1 c1|, Dy=|a1 d1 c1|, Dz=|a1 b1 d1|
+	#   |a2 b2 c2|     |d2 b2 c2|     |a2 d2 c2|     |a2 b2 d2|
+	#   |a3 b3 c3|     |d3 b3 c3|     |a3 d3 c3|     |a3 b3 d3|
+	# 
+	# D!=0 -> x=Dx/D, y=Dy/D, z=Dz/D
+	# D=0, Dx=0, Dy=0, Dz=0 -> 無限多解
+	# D=0, Dx^2+Dy^2+Dz^2 != 0 -> 無解
+	for i in list(e1[0].keys()):
+		if i not in list(e2[0].keys()): e2[0][f"{i}"] = 0
+		if i not in list(e3[0].keys()): e3[0][f"{i}"] = 0
+	for i in list(e2[0].keys()):
+		if i not in list(e1[0].keys()): e1[0][f"{i}"] = 0
+		if i not in list(e3[0].keys()): e3[0][f"{i}"] = 0
+	for i in list(e3[0].keys()):
+		if i not in list(e1[0].keys()): e1[0][f"{i}"] = 0
+		if i not in list(e2[0].keys()): e2[0][f"{i}"] = 0
+	if len(e1[0]) != 3 and len(e2[0]) != 3 and len(e3[0]) != 3:
+		raise TypeError("Too many variables")
+	v = list(e1[0].keys())
+	a1 = e1[0][v[0]]
+	b1 = e1[0][v[1]]
+	c1 = e1[0][v[2]]
+	d1 = e1[1]
+	a2 = e2[0][v[0]]
+	b2 = e2[0][v[1]]
+	c2 = e2[0][v[2]]
+	d2 = e2[1]
+	a3 = e3[0][v[0]]
+	b3 = e3[0][v[1]]
+	c3 = e3[0][v[2]]
+	d3 = e3[1]
+	d = int(a1*b2*c3+b1*c2*a3+c1*a2*b3-c1*b2*a3-b1*a2*c3-a1*c2*b3)
+	dx = int(d1*b2*c3+b1*c2*d3+c1*d2*b3-c1*b2*d3-b1*d2*c3-d1*c2*b3)
+	dy = int(a1*d2*c3+d1*c2*a3+c1*a2*d3-c1*d2*a3-d1*a2*c3-a1*c2*d3)
+	dz = int(a1*b2*d3+b1*d2*a3+d1*a2*b3-d1*b2*a3-b1*a2*d3-a1*d2*b3)
+
+	if d == 0 and dx*dx + dy*dy + dz*dz != 0:
+		return {f'{v[0]}': False, f'{v[1]}': False, f'{v[2]}': True}
+	elif d == 0 and dx ==0 and dy == 0 and dz == 0:
+		return {f'{v[0]}': True, f'{v[1]}': True, f'{v[2]}': True}
+	else:
+		if dx % d == 0: x = dx/d
+		else: x = Fraction(dx, d); x.simplify()
+		if dy % d == 0: y = dy/d
+		else: y = Fraction(dy, d); y.simplify()
+		if dy % d == 0: z = dz/d
+		else: z = Fraction(dz, d); z.simplify()
+		return {f'{v[0]}': x, f'{v[1]}': y, f'{v[2]}': z}
 
 
 # 質因數分解
@@ -158,6 +248,7 @@ def factorize(num) -> list:
 	if num > 1:
 		f.append(num)
 	return f
+
 
 # 簡化根號
 def sim_sqrt(num: int) -> list:
@@ -182,6 +273,3 @@ def sim_sqrt(num: int) -> list:
 			else:
 				i += 1
 	return s
-
-
-# print(cleanup("3x-5+9+2y=7-5y"))

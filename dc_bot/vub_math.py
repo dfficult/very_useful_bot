@@ -25,14 +25,100 @@ async def simfrac(interaction: discord.Interaction, a: int, b: int):
     embed.add_field(name="以百分率表示", value=f"{frac.to_percentage()}%", inline=True)
     await interaction.response.send_message(embed=embed)
 
+@app_commands.command(name="factorize", description="[分數] 質因數分解")
+@app_commands.describe(n="輸入要進行質因數分解的整數")
+async def factorize(interaction: discord.Interaction, n: int):
+    x = m.factorize(n)
+    x.sort()
+    t = f"{n}是質數" if len(x) == 1 else x
+    embed = discord.Embed(
+        title=f"質因數分解{n}：",
+        description=t,
+        color=discord.Color.green()
+    )
+    await interaction.response.send_message(embed=embed)
+
+
 
 # 解方程式
-@app_commands.command(name="solve_21", description="[解方程式] 解二元一次方程式")
+@app_commands.command(name="solve21", description="[解方程式] 解二元一次方程式")
 @app_commands.describe(eq1="第一式", eq2="第二式")
-async def solve_21(interaction: discord.Interaction, eq1:str, eq2: str):
+async def solve21(interaction: discord.Interaction, eq1:str, eq2: str):
+    try:
+        s = m.solve_21(eq1, eq2)
+        d = ""
+        t = "此方程組恰有一解"
+        for key, value in s.items():
+            if type(value) == bool:
+                if value == False:
+                    t = "此方程組無解"
+                    break
+                if value == True:
+                    t = "此方程組有無限多解"
+                    break
+            else:
+                if type(value) == m.Fraction:
+                    value = f"{value.a}/{value.b}"
+                d += f"{key}={value}\n"
+        embed = discord.Embed(
+            title=t,
+            description=d,
+            color=discord.Color.green()
+        )
+        embed.add_field(name=f"第一式",value=eq1,inline=True)
+        embed.add_field(name=f"第二式",value=eq2,inline=True)
+        await interaction.response.send_message(embed=embed)
+    except Exception as e:
+        embed = discord.Embed(
+            title="錯誤!",
+            description="發生錯誤",
+            color=discord.Color.red()
+        )
+        embed.add_field(name=f"第一式",value=eq1,inline=True)
+        embed.add_field(name=f"第二式",value=eq2,inline=True)
+        embed.add_field(name="具體錯誤",value=e)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
-    # "3x+2-5=0" -> [["3x"],["-3"]]
-    ...
+@app_commands.command(name="solve31", description="[解方程式] 解三元一次方程式")
+@app_commands.describe(eq1="第一式", eq2="第二式", eq3="第三式")
+async def solve31(interaction: discord.Interaction, eq1:str, eq2: str, eq3: str):
+    try:
+        s = m.solve_31(eq1, eq2, eq3)
+        d = ""
+        t = "此方程組恰有一解"
+        for key, value in s.items():
+            if type(value) == bool:
+                if value == False:
+                    t = "此方程組無解"
+                    break
+                if value == True:
+                    t = "此方程組有無限多解"
+                    break
+            else:
+                if type(value) == m.Fraction:
+                    value = f"{value.a}/{value.b}"
+                d += f"{key}={value}\n"
+        embed = discord.Embed(
+            title=t,
+            description=d,
+            color=discord.Color.green()
+        )
+        embed.add_field(name=f"第一式",value=eq1,inline=True)
+        embed.add_field(name=f"第二式",value=eq2,inline=True)
+        embed.add_field(name=f"第三式",value=eq3,inline=True)
+        await interaction.response.send_message(embed=embed)
+    except Exception as e:
+        embed = discord.Embed(
+            title="錯誤!",
+            description="發生錯誤",
+            color=discord.Color.red()
+        )
+        embed.add_field(name=f"第一式",value=eq1,inline=True)
+        embed.add_field(name=f"第二式",value=eq2,inline=True)
+        embed.add_field(name=f"第三式",value=eq3,inline=True)
+        embed.add_field(name="具體錯誤",value=e)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
 
 
 # 數據分析

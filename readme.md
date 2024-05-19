@@ -37,6 +37,8 @@
 [`/dice`](manual/math.md#dice-faces)
 #### E
 [`/eat`](manual/eat.md#eat)
+#### F
+[`/factorize`]()
 #### G
 [`/gowhere`](manual/eat.md#gowhere)
 #### M
