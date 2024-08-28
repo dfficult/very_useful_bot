@@ -1,12 +1,13 @@
+# === vub_math.py ===
 import discord
 from discord import app_commands
 from discord.app_commands import Choice
 import random, math, statistics
 from typing import Optional
-import math2 as m
+import math_module as m
 
 
-# 分數
+# --- Command: simfrac ---
 @app_commands.command(name="simfrac", description="[分數] 約分分數")
 @app_commands.describe(a="分子", b="分母")
 async def simfrac(interaction: discord.Interaction, a: int, b: int):
@@ -25,6 +26,8 @@ async def simfrac(interaction: discord.Interaction, a: int, b: int):
     embed.add_field(name="以百分率表示", value=f"{frac.to_percentage()}%", inline=True)
     await interaction.response.send_message(embed=embed)
 
+
+# --- Command: factorize ---
 @app_commands.command(name="factorize", description="[分數] 質因數分解")
 @app_commands.describe(n="輸入要進行質因數分解的整數")
 async def factorize(interaction: discord.Interaction, n: int):
@@ -39,8 +42,7 @@ async def factorize(interaction: discord.Interaction, n: int):
     await interaction.response.send_message(embed=embed)
 
 
-
-# 解方程式
+# --- Command: solve21 ---
 @app_commands.command(name="solve21", description="[解方程式] 解二元一次方程式")
 @app_commands.describe(eq1="第一式", eq2="第二式")
 async def solve21(interaction: discord.Interaction, eq1:str, eq2: str):
@@ -79,6 +81,8 @@ async def solve21(interaction: discord.Interaction, eq1:str, eq2: str):
         embed.add_field(name="具體錯誤",value=e)
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
+
+# --- Command: solve31 ---
 @app_commands.command(name="solve31", description="[解方程式] 解三元一次方程式")
 @app_commands.describe(eq1="第一式", eq2="第二式", eq3="第三式")
 async def solve31(interaction: discord.Interaction, eq1:str, eq2: str, eq3: str):
@@ -120,8 +124,7 @@ async def solve31(interaction: discord.Interaction, eq1:str, eq2: str, eq3: str)
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
-
-# 數據分析
+# --- Command: average ---
 @app_commands.command(name="average", description="[數據分析] 計算算術平均數")
 @app_commands.describe(items="輸入數個有理數，每項數值以空格分開")
 async def average(interaction: discord.Interaction, items: str):
@@ -149,21 +152,98 @@ async def average(interaction: discord.Interaction, items: str):
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
+# --- Command: correlation ---
+@app_commands.command(name="correlation", description="[數據分析] 計算相關係數")
+@app_commands.describe(x="輸入第一組數據，數字間以空格隔開", y="輸入第二組數據，數字間以空格隔開")
+async def correlation(interaction: discord.Interaction, x: str, y: str):
+    xi = x.split(" ")
+    yi = y.split(" ")
+    if len(xi) != len(yi):
+        await interaction.response.send_message("err1")
+    
+    xi = [int(i) for i in xi]
+    yi = [int(i) for i in yi]
+    ax = sum(xi) / len(xi)  # average x
+    ay = sum(yi) / len(yi)  # average y
+    xi_ax = [i - ax for i in xi]  # x離均差
+    yi_ay = [i - ay for i in yi]  # y離均差
+    xaya = [xi_ax[i] * yi_ay[i] for i in range(len(xi))]  # 上面兩個相乘
+    xi_ax_2 = [i * i for i in xi_ax]  # x離均差平方
+    yi_ay_2 = [i * i for i in yi_ay]  # y離均差平方
 
-# 隨機
-@app_commands.command(name="rand", description="[隨機] 隨機選擇一個")
-@app_commands.describe(items="輸入選項，選項間以空格分開")
-async def rand(interaction: discord.Interaction, items: str):
-    choices: list = items.split(" ")
-    rand_i = random.randint(0,len(choices)-1)
-    s = choices[rand_i]
+    def is_int(n: float) -> bool:
+        return n % 1 == 0
+
+    print(sum(xaya), sum(xi_ax_2), sum(yi_ay_2))
+
+    # r = xaya / (√xi_ax_2 * √yi_ay_2)
+    if is_int(sum(xaya)) and is_int(sum(xi_ax_2)) and is_int(sum(yi_ay_2)):
+        fa = int(sum(xaya))  # 分子
+        fb = m.sim_sqrt(int(sum(xi_ax_2) * sum(yi_ay_2)))  # 分母
+        if fb[1] == 1:
+            frac = m.Fraction(fa,fb[0])
+            frac.simplify()
+            r = [frac, 1]
+            if r[0].b == 1:
+                des = f"{r[0].a}"
+            else:
+                des = f"{r[0].a} / {r[0].b}"
+        else:
+            frac = m.Fraction(fa,fb[0]*fb[1])
+            frac.simplify()
+            r = [frac,fb[1]]
+            if r[0].b == 1:
+                des = f"{r[0].a} * √{r[1]}"
+            else:
+                des = f"{r[0].a} / {r[0].b} * √{r[1]}"
+    else:
+        des = sum(xaya) / (math.sqrt(sum(xi_ax_2)) * math.sqrt(sum(yi_ay_2)))
+
+
     embed = discord.Embed(
-        title=f"隨機：{s}",
-        description=items.replace(" ", ", "),
+        title="相關係數",
+        description=des,
         color=discord.Color.green()
     )
+    embed.add_field(name="x資料", value=tuple(xi))
+    embed.add_field(name="y資料", value=tuple(yi))
     await interaction.response.send_message(embed=embed)
 
+
+# --- Command: rand ---
+@app_commands.command(name="rand", description="[隨機] 隨機選擇一個")
+@app_commands.describe(items="輸入選項，選項間以空格分開", amount="選取的數量 (正整數，可不填，預設為1，輸入0會選出隨機個)")
+async def rand(interaction: discord.Interaction, items: str, amount: Optional[int]):
+    choices: list = items.split(" ")
+    if (not amount and amount != 0) or amount < 0 or amount > len(choices):
+        rand_i = random.randint(0,len(choices)-1)
+        s = choices[rand_i]
+        embed = discord.Embed(
+            title=f"隨機：{s}",
+            description=items.replace(" ", ", "),
+            color=discord.Color.green()
+        )
+    else:
+        if amount == 0: amount = random.randint(2,len(choices))
+        # amount
+        for i in range(len(choices)-amount):
+            rand_i = random.randint(0,len(choices)-1)
+            choices.pop(rand_i)
+        # random order
+        for i in range(len(choices)):
+            i1 = random.randint(0, len(choices)-1)
+            i2 = random.randint(0, len(choices)-1)
+            choices[i1], choices[i2] = choices[i2], choices[i1]
+        s = str(choices).replace('[','').replace(']','').replace("'",'')
+        embed = discord.Embed(
+            title=f"隨機取{amount}個：{s}",
+            description=items.replace(" ", ", "),
+            color=discord.Color.green()
+        )  
+    await interaction.response.send_message(embed=embed)
+
+
+# --- Command: dice ---
 @app_commands.command(name="dice", description="[隨機] 骰骰子")
 @app_commands.describe(faces="骰子的面數 (正整數，可不填，預設為6)")
 async def dice(interaction: discord.Interaction, faces: Optional[int]):
@@ -174,7 +254,7 @@ async def dice(interaction: discord.Interaction, faces: Optional[int]):
     await interaction.response.send_message(ran)
 
 
-# 排列、組合與機率
+# --- Command: p ---
 @app_commands.command(name="p", description="[排列組合] 計算從n個取k個，有多少種排列(Permutation)順序")
 @app_commands.describe(n="n值。P(n,k)：從n個中，取k個進行排列", k="k值。P(n,k)：從n個中，取k個進行排列")
 async def p(interaction: discord.Interaction, n: int, k: int):
@@ -208,6 +288,8 @@ async def p(interaction: discord.Interaction, n: int, k: int):
         )
         await interaction.response.send_message(embed=embed)
 
+
+# --- Command: c ---
 @app_commands.command(name="c", description="[排列組合] 計算從n個取k個，有多少種組合(Combination)")
 @app_commands.describe(n="n值。C(n,k)：從n個中，取k個進行組合", k="k值。C(n,k)：從n個中，取k個進行組合")
 async def c(interaction: discord.Interaction, n: int, k: int):
@@ -232,39 +314,7 @@ async def c(interaction: discord.Interaction, n: int, k: int):
         await interaction.response.send_message(embed=embed)
 
 
-# 三角函數
-# @app_commands.command(name="tri2v", description="[三角函數] 給兩向量，求出所圍三角形的資訊")
-# @app_commands.describe(
-#     x0="A向量的x值", y0="A向量的y值", z0="A向量的z值 (若為平面向量，請填0)",
-#     x1="B向量的x值", y1="B向量的y值", z1="B向量的z值 (若為平面向量，請填0)"
-# )
-# async def tri2v(
-#     interaction: discord.Interaction,
-#     x0: int, y0: int, z0: int,
-#     x1: int, y1: int, z1: int
-# ):
-#     embed = discord.Embed(
-#         title="三角形",
-#         color=discord.Color.green()
-#     )
-    
-#     # area = 1/2 * |(x0,y0,z0) X (x1,y1,z1)|
-#     a = m.Fraction(1,2)
-#     s = m.sim_sqrt(pow(y0*z1-z0*y1,2) + pow(z0*x1-z0*z1,2) + pow(x0*y1-y0*x1,2))
-#     a.multiply(m.Fraction(s[0],1))
-#     b = s[1]
-#     area = f"{a.a} √{b}" if a.b == 1 else f"{a.a}/{a.b} √{b}"
-#     embed.add_field(name="面積", value=area, inline=True)
-
-#     side1_sq = x0*x0+y0*y0+z0*z0
-#     side2_sq = x1*x1+y1*y1+z1*z1
-#     # vector a dot b = abcosθ
-#     theta = math.acos((x0*x1+y0*y1+z0*z1)/ math.sqrt(side1_sq*side2_sq))
-#     side3_sq = pow(side1_sq,2) + pow(side2_sq) - 2*math.sqrt()
-
-
-
-# 向量
+# --- Command: vector ---
 @app_commands.command(name="vector", description="[向量] 計算向量、向量的內積、向量的外積")
 @app_commands.describe(
         x0="A點/A向量的x值",
@@ -349,6 +399,8 @@ async def vector(
             embed.add_field(name="B向量", value=b, inline=True)
             await interaction.response.send_message(embed=embed)
 
+
+# --- Command: vectorl ---
 @app_commands.command(name="vectorl", description="[向量] 計算向量的長度")
 @app_commands.describe(x="x值",y="y值",z="z值 (若為平面向量，輸入0)")
 async def vectorl(interaction: discord.Interaction, x: int, y: int, z: int):
@@ -367,7 +419,8 @@ async def vectorl(interaction: discord.Interaction, x: int, y: int, z: int):
         embed.add_field(name="向量", value=f"({x}, {y}, {z})", inline=True)
         await interaction.response.send_message(embed=embed)  
 
-# 平面
+
+# --- Command: surface ---
 @app_commands.command(name="surface", description="[平面] 給一法向量與平面上一點，求出該平面的一般式")
 @app_commands.describe(
     nx="法向量的x值",
@@ -393,7 +446,7 @@ async def surface(
     await interaction.response.send_message(embed=embed)
 
 
-# 行列式與矩陣
+# --- Command: det3 ---
 @app_commands.command(name="det3", description="[行列式] 計算三階行列式(determinant)之值")
 @app_commands.describe(
     a1="第1列，第1行 (左上) (橫列直行)",
@@ -428,6 +481,8 @@ async def det3(
     )
     await interaction.response.send_message(embed=embed)
 
+
+# --- Command: det2 ---
 @app_commands.command(name="det2", description="[行列式] 計算二階行列式(determinant)之值")
 @app_commands.describe(
     a1="第1列，第1行 (左上) (橫列直行)",
@@ -455,3 +510,97 @@ async def det2(
     )
     await interaction.response.send_message(embed=embed)
 
+
+# --- Command: intrmtx2 ---
+@app_commands.command(name="invrmtx2", description="[矩陣] 求出二階反方陣(inverse Matrix)")
+@app_commands.describe(
+    a="第1列，第1行 (左上) (橫列直行)",
+    b="第1列，第2行 (右上) (橫列直行)",
+    c="第2列，第1行 (左下) (橫列直行)",
+    d="第2列，第2行 (右下) (橫列直行)"
+)
+async def invrmtx2(
+    interaction: discord.Interaction,
+    a: int, b: int,
+    c: int, d: int
+):
+    # A = ⌈a b⌉, A^-1 = ⌈d/det(A) -b/det(A)⌉
+    #     ⌊c d⌋         ⌊-c/det(A) a/det(A)⌋
+    # 
+    # det(A) = |a b|, no inverse if det(A)=0
+    #          |c d|
+    det = a * d - b * c
+    has_invr = True if det != 0 else False
+    if has_invr:
+        a1 = d / det
+        b1 = -b / det
+        c1 = -c / det
+        d1 = a / det
+        # fraction
+        if type(a1) == float and len(str(a1)) < 6: a1 = str(a1)
+        else: t = m.Fraction(d,det); t.simplify; a1 = f"{t.a}/{t.b}" if t.b != 1 else t.a
+        if type(b1) == float and len(str(b1)) < 6: b1 = str(b1)
+        else: t = m.Fraction(-b,det); t.simplify; b1 = f"{t.a}/{t.b}" if t.b != 1 else t.a
+        if type(c1) == float and len(str(c1)) < 6: c1 = str(c1)
+        else: t = m.Fraction(-c,det); t.simplify; c1 = f"{t.a}/{t.b}" if t.b != 1 else t.a
+        if type(d1) == float and len(str(d1)) < 6: d1 = str(d1)
+        else: t = m.Fraction(a,det); t.simplify; d1 = f"{t.a}/{t.b}" if t.b != 1 else t.a
+
+
+    # Format width
+    width = max([len(str(i)) for i in [a,b,c,d]])
+    embed = discord.Embed(
+        title="此矩陣有反矩陣" if has_invr else "此矩陣沒有反矩陣",
+        description=
+        f"原矩陣：\n⌈{a: {width}d} {b: {width}d}⌉\n⌊{c: {width}d} {d: {width}d}⌋",
+        color=discord.Color.green()
+    )
+    if has_invr:
+        embed.description += f"\n反矩陣：\n⌈{a1} {b1}⌉\n⌊{c1} {d1}⌋"
+    await interaction.response.send_message(embed=embed)
+
+
+# --- MatrixMultiply window ---
+class MatrixMultiply(discord.ui.Modal, title="矩陣乘法"):
+    a = discord.ui.TextInput(
+        style=discord.TextStyle.long,
+        label="矩陣A",
+        required=True,
+        placeholder="請輸入矩陣，每一個數值以空格隔開，使用Enter換行"
+    )
+
+    b = discord.ui.TextInput(
+        style=discord.TextStyle.long,
+        label="矩陣B",
+        required=True,
+        placeholder="請輸入矩陣，每一個數值以空格隔開，使用Enter換行"
+    )
+
+    async def on_submit(self, interaction: discord.Interaction):
+        # matrix a
+        str_a: str = self.a.value
+        mtx_a = str_a.split("\n")
+        for i in range(len(mtx_a)): mtx_a[i] = mtx_a[i].split(" ")
+        for i in range(len(mtx_a)):
+            for j in range(len(mtx_a[i])):
+                try: mtx_a[i][j] = int(mtx_a[i][j])
+                except: await interaction.response.send_message(f"錯誤：{mtx_a[i][j]}不是整數，請再試一次")
+        # matrix b
+        str_b: str = self.b.value
+        mtx_b = str_b.split("\n")
+        for i in range(len(mtx_b)): mtx_b[i] = mtx_b[i].split(" ")
+        for i in range(len(mtx_b)):
+            for j in range(len(mtx_b[i])):
+                try: mtx_b[i][j] = int(mtx_b[i][j])
+                except: await interaction.response.send_message(f"錯誤：{mtx_b[i][j]}不是整數，請再試一次")
+        # multiply            
+
+    async def on_error(self, interaction: discord.Interaction, error):
+        print(error)  # prints error
+
+
+# --- Command: mtxmtply ---
+@app_commands.command(name="mtxmtply", description="[矩陣] 矩陣相乘")
+@app_commands.describe()
+async def mtxmtply(interaction: discord.Interaction):
+    await interaction.response.send_modal(MatrixMultiply())

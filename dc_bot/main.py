@@ -1,37 +1,72 @@
-import discord
-from discord.ext import commands
+# ----------------------------------------------- #
+#                  2024.8.29                      #
+#         VeryUsefulBot by Dfficult               #
+# https://www.github.com/dfficult/very_useful_bot #
+# ----------------------------------------------- #
+
+# Instructions: 1. Enter your token in line 27
+
+# === main.py ===
+import discord, datetime, asyncio
+from discord.ext import commands, tasks
 try:
     from eat import *
     from vub_math import *
     from money import *
-    from yazy import *
     from dates import *
+    from codes import *
+    from notice import *
 except Exception as e:
+    print(e)
     print("Try running 'main.py' again in the '/dc_bot' directory")
     input("Press Enter to exit ...")
     exit()
 
-TOKEN = "TOKEN"
-PREFIX = "!"
 
+# --- Discord bot token ---
+TOKEN = "TOKEN"
 if TOKEN == "TOKEN":
     x = input("Token is not specified, enter your token or leave it blank to exit: ")
     if x == '': exit()
     else: TOKEN = x
 
-# Create bot instance
-bot = commands.Bot(command_prefix=PREFIX,intents=discord.Intents.all())
 
+# --- Create bot instance ---
+bot = commands.Bot(command_prefix="!",intents=discord.Intents.all())
+
+
+# --- Bot loop ---
+@tasks.loop(minutes=1)
+async def notice_loop():
+    result = check_notice()
+    if result:
+        for i in result:
+            # result = [..., [user, channel, embed], ...]
+            channel = bot.get_channel(i[1])
+            await channel.send(f"<@{i[0]}>",embed=i[2])
+
+
+# --- Sync bot loop ---
+async def sync_task_to_minute():
+    now = datetime.datetime.now()
+    # Calculate the time to wait until the next minute starts
+    seconds_to_wait = 60 - now.second
+    await asyncio.sleep(seconds_to_wait)
+    notice_loop.start()
+
+
+# --- Load bot ---
 @bot.event
 async def on_ready():
     slash = await bot.tree.sync()
-    print(f"已登入：{bot.user}")
-    print(f"已載入 {len(slash)} 個指令")
-    # await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=""))
+    print(f"{bot.user} 已成功登入，並已載入{len(slash)}個指令")
+    await sync_task_to_minute()
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="ChatGPT"))
     # await bot.change_presence(activity=discord.Game(name=""))
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="Never Gonna Give You Up"))
+    # await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="Never Gonna Give You Up"))
 
 
+# --- Actions when bot receives any message ---
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
@@ -39,7 +74,8 @@ async def on_message(message):
     if message.content == "hello world":
         await message.channel.send("Hello World!")
     
-# Commands
+
+# --- An example command ---
 @app_commands.command(name="vubhelp", description="所有指令說明")
 async def vubhelp(interaction: discord.Interaction):
     embed = discord.Embed(
@@ -48,27 +84,23 @@ async def vubhelp(interaction: discord.Interaction):
     )
     await interaction.response.send_message(embed=embed)
 
-@bot.command()
-async def change_status(ctx, *type, **status):
-    match type:
-        case "watch":
-            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=status))
-        case "game":
-            await bot.change_presence(activity=discord.Game(name=status))
-        case "listen":
-            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=status))
-    await ctx.send(f"Changed to [{type}] [{status}]")
 
-
+# --- Add all commands to the bot ---
 bot.tree.add_command(vubhelp)
-
+# notice.py
+bot.tree.add_command(notice)
+bot.tree.add_command(delnotice)
+# code.py
+bot.tree.add_command(code)
+bot.tree.add_command(submit_code)
+# dates.py
 bot.tree.add_command(today)
-
+bot.tree.add_command(daysleft)
+# eat.py
 bot.tree.add_command(eat)
 bot.tree.add_command(addfood)
-
-bot.tree.add_command(gowhere)
-
+# vub_math.py
+bot.tree.add_command(correlation)
 bot.tree.add_command(simfrac)
 bot.tree.add_command(factorize)
 bot.tree.add_command(solve21)
@@ -81,20 +113,14 @@ bot.tree.add_command(surface)
 bot.tree.add_command(average)
 bot.tree.add_command(det3)
 bot.tree.add_command(det2)
+bot.tree.add_command(invrmtx2)
 bot.tree.add_command(p)
 bot.tree.add_command(c)
-
-bot.tree.add_command(mborrow)
+# money.py
+bot.tree.add_command(mlend)
 bot.tree.add_command(mhistory)
 bot.tree.add_command(mdelete)
 
-bot.tree.add_command(yazystart)
-bot.tree.add_command(yazyreset)
-bot.tree.add_command(yazyroll)
-bot.tree.add_command(yazyhold)
-bot.tree.add_command(yazychoose)
-bot.tree.add_command(yazyscore)
 
-
-# Run
+# Run the bot
 bot.run(TOKEN)

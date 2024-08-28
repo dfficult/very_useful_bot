@@ -1,29 +1,26 @@
 # very_useful_bot
 
-這是一個非常有用的Discord機器人，能為你的Discord伺服器增添光彩，他可以做到以下事項
+這是一個非常有用的Discord機器人，能為你的Discord伺服器增添光彩，他可以做到以下事項：
 
+- #### NEW!! C++ Online Judge (線上解題系統)
+    對，我把一個OJ系統搬到Discord上了，目前只支援C++
 
-- #### 頂級數學機器人
-    **[試試看](manual/math.md)**  
-    涵蓋了國、高中數學，幫你計算一些你算都不想再算的東西，例如約分分數、行列式、向量的內外積等。
+- #### 數學機器人
+    涵蓋了國、高中數學，例如約分分數、行列式、向量的內外積等。
 
-- #### 幫你決定要吃什麼
-    **[試試看](manual/eat.md)**  
-    還在為下一餐吃什麼而煩惱嗎? 那你一定要試試整個機器人裡面最實用的指令。
+- #### 決定吃什麼
+    還在為下一餐吃什麼而煩惱嗎? 那你一定要試試最實用的指令。
 
 - #### 記住誰欠你多少錢
-    **[試試看](manual/money.md)**  
-    別人欠你多少錢都不知道? 簡單紀錄你借出去多少錢。
+    簡單紀錄你借出去多少錢。
 
-- #### 簡單的運氣小遊戲
-    **[試試看]()**  
-    Yazy，一個骰子比大小遊戲。
+
 
 ## 安裝說明
-請自行找一台電腦作為伺服器，效能不用理會，然後按照[設定步驟 (尚未完成)]()來架設你的Discord機器人伺服器。
+請自行找一台電腦作為伺服器，OS: Linux，然後按照[設定步驟 (尚未完成)]()來架設你的Discord機器人伺服器。
 
 ## 所有指令說明
-我們採用了Discord最新黑科技 - 斜線指令 `/`  
+採用斜線指令(Slash Command) `/`  
 只要輸入 `/` ，就有簡易的指令說明  
 輸入`/vubhelp`會產生Github連結，導向這個頁面
 
@@ -31,6 +28,7 @@
 [`/average`](manual/math.md#average-items)
 #### C
 `/c`
+[`/code`]()
 #### D
 [`/det2`](manual/math.md#det2-a1-a2-b1-b2)
 [`/det3`](manual/math.md#det3-a1-a2-a3-b1-b2-b3-c1-c2-c3)
@@ -45,22 +43,18 @@
 [`/mborrow`](manual/money.md#mborrow-user-amount)
 [`/mdelete`](manual/money.md#mdelete-option)
 [`/mhistory`](manual/money.md#mhistory)
+#### N
+[`/notice`](manual/notice.md#notice)
 #### P
 `/p`
 #### R
 [`/rand`](manual/math.md#rand-items)
 #### S
 [`/surface`](manual/math.md#surface-nx-ny-nz-x-y-z)
+[`/submit_code`]()
 #### T
 [`/today`](manual/others.md#today)
 #### V
 [`/vector`](manual/math.md#vector-x0-y0-z0-action-x1-y1-z1)
 [`/vectorl`](manual/math.md#vectorl-x-y-z)
 [`/vubhelp`](#所有指令說明)
-#### Y
-`/yazychoose`
-`/yazyhold`
-`/yazyreset`
-`/yazyroll`
-`/yazyscore`
-`/yazystart`

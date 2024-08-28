@@ -1,12 +1,14 @@
+# === money.py ===
 import discord
 from discord import app_commands
 import json
 import datetime
 
 
-@app_commands.command(name="mborrow", description="[記帳] 紀錄誰欠你錢")
+# --- Command: mlend ---
+@app_commands.command(name="mlend", description="[記帳] 紀錄誰欠你錢")
 @app_commands.describe(user="輸入欠你錢的人 (@...)", amount="輸入金額 (正整數，不用加上$或單位)")
-async def mborrow(interaction: discord.Interaction, user: discord.User, amount: int):
+async def mlend(interaction: discord.Interaction, user: discord.User, amount: int):
     creditor: str = str(interaction.user)
 
     this = {
@@ -43,6 +45,7 @@ async def mborrow(interaction: discord.Interaction, user: discord.User, amount: 
     await interaction.response.send_message(embed=embed)
         
 
+# --- Command: mhistory ---
 @app_commands.command(name="mhistory", description="[記帳] 查看誰欠你錢")
 async def mhistory(interaction: discord.Interaction):
     creditor: str = str(interaction.user)
@@ -71,6 +74,7 @@ async def mhistory(interaction: discord.Interaction):
     await interaction.response.send_message(embed=embed)
         
 
+# --- Command: mdelete ---
 @app_commands.command(name="mdelete", description="[記帳] 刪除紀錄")
 @app_commands.describe(option="編號 (使用 [/mhistory] 來查看紀錄編號)")
 async def mdelete(interaction: discord.Interaction, option: int):

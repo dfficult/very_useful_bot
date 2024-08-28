@@ -1,9 +1,12 @@
+# === This is my math module ===
 import math
 
 
+# --- This will be used someday ----
 "[√] <-- This is square root"
 
-# 分數
+
+# --- Fraction ---
 class Fraction:
 	def __init__(self, a: int, b: int):
 		# a/b
@@ -38,7 +41,7 @@ class Fraction:
 		return self.a / self.b * 100
 
 
-# 整理方程式 
+# --- 整理方程式 ---
 def cleanup(eq: str) -> list:
 	# 3x-5+2y+6=7 -> [{'x': 3.0, 'y': 2},6]
 	
@@ -129,7 +132,7 @@ def cleanup(eq: str) -> list:
 	return [l, r]
 				
 
-# 二元一次聯立方程式
+# --- 二元一次聯立方程式 ---
 def solve_21(eq1: str, eq2: str) -> dict:
 	e1 = cleanup(eq1)
 	e2 = cleanup(eq2)
@@ -174,7 +177,7 @@ def solve_21(eq1: str, eq2: str) -> dict:
 		return {f'{v[0]}': x, f'{v[1]}': y}
 
 
-# 三元一次聯立方程式
+# --- 三元一次聯立方程式 ---
 def solve_31(eq1: str, eq2: str, eq3: str) -> dict:
 	e1 = cleanup(eq1)
 	e2 = cleanup(eq2)
@@ -235,7 +238,7 @@ def solve_31(eq1: str, eq2: str, eq3: str) -> dict:
 		return {f'{v[0]}': x, f'{v[1]}': y, f'{v[2]}': z}
 
 
-# 質因數分解
+# --- 質因數分解 ---
 def factorize(num) -> list:
 	i = 2
 	f = []
@@ -250,7 +253,7 @@ def factorize(num) -> list:
 	return f
 
 
-# 簡化根號
+# --- 簡化根號 ---
 def sim_sqrt(num: int) -> list:
 	# return s [a,b] means a√b
 	f = factorize(num)
