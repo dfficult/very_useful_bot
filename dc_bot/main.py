@@ -1,5 +1,5 @@
 # ----------------------------------------------- #
-#                  2024.8.29                      #
+#                  2024.9.21                      #
 #         VeryUsefulBot by Dfficult               #
 # https://www.github.com/dfficult/very_useful_bot #
 # ----------------------------------------------- #
@@ -60,10 +60,11 @@ async def sync_task_to_minute():
 async def on_ready():
     slash = await bot.tree.sync()
     print(f"{bot.user} 已成功登入，並已載入{len(slash)}個指令")
-    await sync_task_to_minute()
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="ChatGPT"))
-    # await bot.change_presence(activity=discord.Game(name=""))
+    # await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="YouTube"))
+    await bot.change_presence(activity=discord.Game(name="Grand Theft Auto VI"))
     # await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="Never Gonna Give You Up"))
+    await sync_task_to_minute()
+
 
 
 # --- Actions when bot receives any message ---
