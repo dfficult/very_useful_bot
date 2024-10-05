@@ -1,5 +1,5 @@
 # ----------------------------------------------- #
-#                  2024.9.21                      #
+#                  2024.10.5                      #
 #         VeryUsefulBot by Dfficult               #
 # https://www.github.com/dfficult/very_useful_bot #
 # ----------------------------------------------- #
@@ -94,6 +94,7 @@ bot.tree.add_command(delnotice)
 # code.py
 bot.tree.add_command(code)
 bot.tree.add_command(submit_code)
+bot.tree.add_command(new_code_q)
 # dates.py
 bot.tree.add_command(today)
 bot.tree.add_command(daysleft)
