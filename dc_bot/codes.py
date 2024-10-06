@@ -11,8 +11,7 @@ def diffToName(difficulty: int) -> str:
     match difficulty:
         case 0: return "簡單"
         case 1: return "普通"
-        case 2: return "中等"
-        case 3: return "困難"
+        case 2: return "困難"
 
 
 
@@ -106,8 +105,7 @@ class SubmitWindow(discord.ui.Modal, title="提交程式碼"):
     difficulty = [
         Choice(name="簡單", value=0),
         Choice(name="普通", value=1),
-        Choice(name="中等", value=2),
-        Choice(name="困難", value=3)
+        Choice(name="困難", value=2)
     ]
 )
 async def code(interaction: discord.Interaction, difficulty: Choice[int], id: Optional[int]):
@@ -154,8 +152,7 @@ async def code(interaction: discord.Interaction, difficulty: Choice[int], id: Op
     difficulty=[
         Choice(name="簡單", value=0),
         Choice(name="普通", value=1),
-        Choice(name="中等", value=2),
-        Choice(name="困難", value=3)
+        Choice(name="困難", value=2)
     ]
 )
 async def submit_code(interaction: discord.Interaction, difficulty: Choice[int], id: int, language: Choice[str]):
