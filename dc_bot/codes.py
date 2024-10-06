@@ -110,8 +110,12 @@ class SubmitWindow(discord.ui.Modal, title="提交程式碼"):
 )
 async def code(interaction: discord.Interaction, difficulty: Choice[int], id: Optional[int]):
     if not id:
-        with open(f"code_test/{difficulty.value}/last_id.txt", "r") as f:
-            id = random.randint(1,int(f.read()))
+        with open(f"code_test/{difficulty.value}/last_id.txt", "r", encoding="utf-8") as f:
+            content = int(f.read())
+            if content == 0:
+                await interaction.response.send_message("此難易度尚未有題目")
+                return
+            id = random.randint(1,content)
     file_path = f"code_test/{difficulty.value}/{id}.json"
 
     if os.path.exists(file_path):
