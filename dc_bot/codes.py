@@ -75,7 +75,7 @@ class SubmitWindow(discord.ui.Modal, title="提交程式碼"):
                 await interaction.followup.send(embed=embed)
                 return
             else:
-                if result.stdout == question["tests"][i]["output"]:
+                if result.stdout.split() == question["tests"][i]["output"].split():
                     # Correct
                     passed += 1
                 else:
