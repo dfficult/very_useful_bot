@@ -1,10 +1,9 @@
-# ----------------------------------------------- #
-#                  2024.10.5                      #
-#         VeryUsefulBot by Dfficult               #
-# https://www.github.com/dfficult/very_useful_bot #
-# ----------------------------------------------- #
+# VeryUsefulBot v1.5
+# 2025.1.2
 
-# Instructions: 1. Enter your token in line 27
+
+# --- Settings ---
+TOKEN = "TOKEN"
 
 # === main.py ===
 import discord, datetime, asyncio
@@ -16,6 +15,7 @@ try:
     from dates import *
     from codes import *
     from notice import *
+    from flashcard import *
 except Exception as e:
     print(e)
     print("Try running 'main.py' again in the '/dc_bot' directory")
@@ -24,7 +24,6 @@ except Exception as e:
 
 
 # --- Discord bot token ---
-TOKEN = "TOKEN"
 if TOKEN == "TOKEN":
     x = input("Token is not specified, enter your token or leave it blank to exit: ")
     if x == '': exit()
@@ -122,6 +121,8 @@ bot.tree.add_command(c)
 bot.tree.add_command(mlend)
 bot.tree.add_command(mhistory)
 bot.tree.add_command(mdelete)
+# flashcard.py
+bot.tree.add_command(flashcard)
 
 
 # Run the bot
