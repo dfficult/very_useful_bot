@@ -1,5 +1,5 @@
-# VeryUsefulBot v1.5.1
-# 2025.1.22
+# VeryUsefulBot v1.5.2
+# 2025.1.31
 
 
 # --- Settings ---
@@ -17,6 +17,7 @@ try:
     from notice import *
     from flashcard import *
     from calculator import *
+    from wordle import *
 except Exception as e:
     print(e)
     print("Try running 'main.py' again in the '/dc_bot' directory")
@@ -126,6 +127,8 @@ bot.tree.add_command(mdelete)
 bot.tree.add_command(flashcard)
 # calculator.py
 bot.tree.add_command(calculator)
+# wordle.py
+bot.tree.add_command(wordle)
 
 
 # Run the bot
