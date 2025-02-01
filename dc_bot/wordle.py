@@ -4,6 +4,37 @@ from PIL import Image, ImageDraw, ImageFont
 import random, io
 
 
+def turn_lower_to_upper(word: str) -> str:
+    """
+    Turns lowercase letter to upper case.
+    Example: "hello" returns "HELLO". 
+    Return SyntaxError when word is not A~Z or a~z.
+    """
+    result = ""
+    for i in range(len(word)):
+        ascii_value = ord(word[i])
+        if ascii_value >= 65 and ascii_value <= 90: # A~Z
+            result += chr(ascii_value)
+        elif ascii_value >= 97 and ascii_value <= 122: # a~z
+            result += chr(ascii_value - 32)
+        else:
+            raise SyntaxError("Not English")
+    return result
+
+
+def bubble_sort(to_sort: list) -> None:
+    """
+    Bubble sorts a list.
+    """
+    for i in range(len(to_sort)):
+        swapped = False
+        for j in range(0, len(to_sort)-i-1):
+            if to_sort[j] > to_sort[j+1]:
+                to_sort[j], to_sort[j+1] = to_sort[j+1], to_sort[j]
+                swapped = True
+        if not swapped: break
+
+
 class Wordle:
     def __init__(self, player, answer):
         self.player = player
@@ -30,7 +61,6 @@ class Wordle:
 
 
         # green
-        self.correct = []
         for i in range(len(guess)):
             if guess[i] == self.answer[i]:
                 result[i] = (83, 141, 78) # rgb green
@@ -47,7 +77,6 @@ class Wordle:
                 if guess[i] in self.left: self.left.remove(guess[i])
 
         # yellow / gray
-        self.wrong_place = []
         for i in range(len(guess)):
             if result[i] != (83, 141, 78): # not green
                 # yellow
@@ -84,37 +113,6 @@ class Wordle:
 
 playerdata = []
 
-def turn_lower_to_upper(word: str) -> str:
-    """
-    Turns lowercase letter to upper case.
-    Example: "hello" returns "HELLO". 
-    Return SyntaxError when word is not A~Z or a~z.
-    """
-    result = ""
-    for i in range(len(word)):
-        ascii_value = ord(word[i])
-        if ascii_value >= 65 and ascii_value <= 90: # A~Z
-            result += chr(ascii_value)
-        elif ascii_value >= 97 and ascii_value <= 122: # a~z
-            result += chr(ascii_value - 32)
-        else:
-            raise SyntaxError("Not English")
-    return result
-
-def bubble_sort(to_sort: list) -> None:
-    """
-    Bubble sorts a list.
-    """
-    for i in range(len(to_sort)):
-        swapped = False
-        for j in range(0, len(to_sort)-i-1):
-            if to_sort[j] > to_sort[j+1]:
-                to_sort[j], to_sort[j+1] = to_sort[j+1], to_sort[j]
-                swapped = True
-        if not swapped: break
-
-
-
 
 @app_commands.command(name="wordle", description="[Worlde] 猜測Wordle單字")
 @app_commands.describe(guess="你的猜測")
@@ -146,17 +144,17 @@ async def wordle(interaction: discord.Interaction, guess: str):
     except SyntaxError:
         await interaction.response.send_message(f"{guess} 包含非英文字元")
         return
-    # Stop game detection
-    if guess == "STOP":
-        # stop the game
+    # Quit game detection
+    if guess == "QUIT":
+        # End the game
         for i in range(len(playerdata)):
             if playerdata[i].player == interaction.user.name:
                 playerdata.pop(i)
-        await interaction.response.send_message(f"答案是{game.answer}，已關閉遊戲")
+        await interaction.response.send_message(f"答案是{game.answer}，已結束遊戲")
         return
     # Debug mode
     if guess == "DEBG":
-        # debug only
+        # For debug purpose only
         embed = discord.Embed(
             title="Debug Mode",
             description="For debug purpose only.",
@@ -164,10 +162,19 @@ async def wordle(interaction: discord.Interaction, guess: str):
         )
         embed.add_field(name="player", value=game.player)
         embed.add_field(name="answer", value=game.answer)
-        embed.add_field(name="correct", value=game.correct)
-        embed.add_field(name="wrong_place", value=game.wrong_place)
-        embed.add_field(name="incorrect", value=game.incorrect)
-        embed.add_field(name="left", value=game.left)
+        embed.add_field(name="attempts count", value=len(game.guesses))
+        for i in range(len(game.guesses)):
+            color = []
+            for j in range(5):
+                match game.color[i][j]:
+                    case (58, 58, 60): color.append('B')
+                    case (181, 159, 59): color.append('Y')
+                    case (83, 141, 78): color.append('G')
+            embed.add_field(name=f"attempt {i+1}", value=f"{''.join(j for j in game.guesses[i])} / {''.join(j for j in color)}")
+        embed.add_field(name="correct", value="".join(j for j in game.correct))
+        embed.add_field(name="wrong_place", value="".join(j for j in game.wrong_place))
+        embed.add_field(name="incorrect", value="".join(j for j in game.incorrect))
+        embed.add_field(name="left", value="".join(j for j in game.left))
         await interaction.response.send_message(embed=embed)
         return
     # Word length detection
