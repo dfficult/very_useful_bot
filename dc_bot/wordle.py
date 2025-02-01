@@ -74,10 +74,10 @@ class Wordle:
         self.color.append(result)
         self.guesses.append([i for i in guess])
         
-        if len(self.guesses) >= 6:
-            return 2 # lose
-        elif guess == self.answer:
+        if guess == self.answer:
             return 1 # win
+        elif len(self.guesses) >= 6:
+            return 2 # lose
         else:
             return 0
 
