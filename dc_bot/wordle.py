@@ -276,6 +276,8 @@ async def wordle(interaction: discord.Interaction, guess: str):
         try:
             await game.interaction.edit_original_response(attachments=[File(buffer, 'myimage.png')], embed=embed)
             await interaction.response.send_message("已上傳猜測，請查看原始訊息", delete_after=DELETE_AFTER)
-        except:
-            await interaction.response.send_message(file=File(buffer, 'myimage.png'), embed=embed)
+        except Exception as e:
+            print(e)
+            buffer.seek(0)  # Reset position again before trying to send the second time
+            await interaction.response.send_message(f"發生錯誤 {e}，請回報此問題", file=File(buffer, 'myimage.png'), embed=embed)
             game.interaction = interaction

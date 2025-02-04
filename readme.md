@@ -1,6 +1,6 @@
 # very_useful_bot
-[v1.5.3](#changelog)  
-2025.2.1  
+[v1.5.3.01](#changelog)  
+2025.2.4  
 
 如同名稱，這是一個非常有用的Discord機器人，以下是主打的功能：
 
@@ -60,10 +60,11 @@ VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有�
 
 ## Changelog
 
-Latest: 1.5.3
+Latest: 1.5.3.01
 
 ### v1.5 FlashCard and Minigames
-- [1.5.3] Wordle: Edit message instead of creating a new message on every guess, Debug Mode set to ephemeral, Changed some variable to constant, Deletes message after 2 seconds, Added allowed guesses list
+- [1.5.3.01]() Wordle: Fixed sometimes it does not show image properly
+- [1.5.3](https://github.com/dfficult/very_useful_bot/commit/21a99691a45973f0b107d16f751268cd2f1f1ce4) Wordle: Edit message instead of creating a new message on every guess, Debug Mode set to ephemeral, Changed some variable to constant, Deletes message after 2 seconds, Added allowed guesses list
 - [1.5.2.02](https://github.com/dfficult/very_useful_bot/commit/1d2e5f2fe09f9ac37c191c8a4fe95f5ec3d55d16) Fixed incorrect bottom color showing, made better debug mode, updated [readme.md](#very_useful_bot), added changelog
 - [1.5.2.01](https://github.com/dfficult/very_useful_bot/commit/251297706200472cac2c86b7f59cd9faca392d73) Fixed winnig at 6th attempt returned lose
 - [1.5.1](https://github.com/dfficult/very_useful_bot/commit/2c266c7dbe273a4024ec436c6f4166b30ca15cd6) Added Calculator
