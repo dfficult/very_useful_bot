@@ -4,6 +4,13 @@ from PIL import Image, ImageDraw, ImageFont
 import random, io
 
 
+# Settings (DO NOT CHANGE, DIFFERENT VALUE HAVE NOT TESTED YET)
+DELETE_AFTER = 2  # Invalid guess message deletes after x seconds
+WORD_LENGTH = 5   # How long a word is (Note: wordle.txt need to all be this long or cause bug)
+ATTEMPS = 6       # How many attempts a user can have
+
+
+
 def turn_lower_to_upper(word: str) -> str:
     """
     Turns lowercase letter to upper case.
@@ -36,8 +43,9 @@ def bubble_sort(to_sort: list) -> None:
 
 
 class Wordle:
-    def __init__(self, player, answer):
+    def __init__(self, interaction: discord.Interaction, player, answer):
         self.player = player
+        self.interaction = interaction
         self.guesses = []
         self.color = []
         self.answer = answer
@@ -52,7 +60,7 @@ class Wordle:
         Returns 1 when you win.
         Returns 2 when you lost all chances.
         """
-        result = [()] * 5
+        result = [()] * WORD_LENGTH
         
         # Track every letter occurence in answer
         answer_letter_count = {}
@@ -105,7 +113,7 @@ class Wordle:
         
         if guess == self.answer:
             return 1 # win
-        elif len(self.guesses) >= 6:
+        elif len(self.guesses) >= ATTEMPS:
             return 2 # lose
         else:
             return 0
@@ -119,21 +127,25 @@ playerdata = []
 async def wordle(interaction: discord.Interaction, guess: str):
     
     # Wordlist
-    # taken from here: https://gist.github.com/cfreshman/a03ef2cba789d8cf00c08f767e0fad7b
-    with open("wordle.txt", "r") as f:
-        wordlist = [i.strip() for i in f.readlines()]
-
+    # Possible answers, taken from here: https://gist.github.com/cfreshman/a03ef2cba789d8cf00c08f767e0fad7b
+    with open("wordle/answers.txt", "r") as f:
+        answer_list = [i.strip() for i in f.readlines()]
+    # Allowed guesses (Seperated to prevent least seen words to be the answer), taken from here: https://gist.github.com/cfreshman/40608e78e83eb4e1d60b285eb7e9732f
+    with open("wordle/allowed_guesses.txt", "r") as f:
+        allowed_guesses = [i.strip() for i in f.readlines()]
     # Join game
     global playerdata
     find = False
     for i in playerdata:
-        if i.player == interaction.user.name: find = True
-        game = i
+        if i.player == interaction.user.name:
+            find = True
+            game = i
+            break
     if not find:
         # Randomly select an answer
-        word = wordlist[random.randint(0, len(wordlist)-1)]
+        word = answer_list[random.randint(0, len(answer_list)-1)]
         answer = turn_lower_to_upper(word)
-        game = Wordle(player = interaction.user.name, answer = answer)
+        game = Wordle(interaction = interaction, player = interaction.user.name, answer = answer)
         playerdata.append(game)
 
     
@@ -142,7 +154,7 @@ async def wordle(interaction: discord.Interaction, guess: str):
     try:
         guess = turn_lower_to_upper(guess)
     except SyntaxError:
-        await interaction.response.send_message(f"{guess} 包含非英文字元")
+        await interaction.response.send_message(f"{guess} 包含非英文字元", delete_after=DELETE_AFTER)
         return
     # Quit game detection
     if guess == "QUIT":
@@ -150,7 +162,7 @@ async def wordle(interaction: discord.Interaction, guess: str):
         for i in range(len(playerdata)):
             if playerdata[i].player == interaction.user.name:
                 playerdata.pop(i)
-        await interaction.response.send_message(f"答案是{game.answer}，已結束遊戲")
+        await interaction.response.send_message(f"答案是{game.answer}，已結束遊戲", delete_after=DELETE_AFTER)
         return
     # Debug mode
     if guess == "DEBG":
@@ -165,7 +177,7 @@ async def wordle(interaction: discord.Interaction, guess: str):
         embed.add_field(name="attempts count", value=len(game.guesses))
         for i in range(len(game.guesses)):
             color = []
-            for j in range(5):
+            for j in range(WORD_LENGTH):
                 match game.color[i][j]:
                     case (58, 58, 60): color.append('B')
                     case (181, 159, 59): color.append('Y')
@@ -175,17 +187,17 @@ async def wordle(interaction: discord.Interaction, guess: str):
         embed.add_field(name="wrong_place", value="".join(j for j in game.wrong_place))
         embed.add_field(name="incorrect", value="".join(j for j in game.incorrect))
         embed.add_field(name="left", value="".join(j for j in game.left))
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
         return
     # Word length detection
-    if len(guess) != 5:
-        await interaction.response.send_message(f"{guess} 的長度不是5個字")
+    if len(guess) != WORD_LENGTH:
+        await interaction.response.send_message(f"{guess} 的長度不是{WORD_LENGTH}個字", delete_after=DELETE_AFTER)
         return
     # Word not found detection
-    if guess in wordlist:
+    if guess in answer_list or guess in allowed_guesses:
         result = game.guess(guess)
     else:
-        await interaction.response.send_message(f"{guess} 不在單字清單內")
+        await interaction.response.send_message(f"{guess} 不在單字清單內", delete_after=DELETE_AFTER)
         return
 
 
@@ -193,8 +205,6 @@ async def wordle(interaction: discord.Interaction, guess: str):
     WIDTH = 50
     HEIGHT = 50
     MARGIN= 5
-    WORD_LENGTH = 5
-    ATTEMPS = 6
     # Fonts: for Windows, arial is there
     try: font = ImageFont.truetype("arial.ttf", 30)
     except: font = ImageFont.load_default()
@@ -228,20 +238,20 @@ async def wordle(interaction: discord.Interaction, guess: str):
     buffer.seek(0) 
 
 
-    # update playerdata
+    # Update playerdata
     for i in range(len(playerdata)):
         if playerdata[i].player == interaction.user.name:
             playerdata[i] = game
 
-    # embed
+    # Embed
     embed = discord.Embed(
-        title=f"猜測 {len(game.guesses)}/6",
+        title=f"猜測 {len(game.guesses)}/{ATTEMPS}",
         description="",
         color=discord.Color.green()
     )
     
 
-    # win/lose detection
+    # Win/Lose Detection
     if result == 1:
         embed.description = "你贏了"
         for i in range(len(playerdata)):
@@ -259,6 +269,13 @@ async def wordle(interaction: discord.Interaction, guess: str):
         embed.add_field(name="尚未嘗試", value="".join(i for i in game.left))
 
 
-    # send image
-    await interaction.response.send_message(file=File(buffer, 'myimage.png'), embed=embed)
-
+    # Send Results
+    if len(game.guesses) == 1:
+        await interaction.response.send_message(file=File(buffer, 'myimage.png'), embed=embed)
+    else:
+        try:
+            await game.interaction.edit_original_response(attachments=[File(buffer, 'myimage.png')], embed=embed)
+            await interaction.response.send_message("已上傳猜測，請查看原始訊息", delete_after=DELETE_AFTER)
+        except:
+            await interaction.response.send_message(file=File(buffer, 'myimage.png'), embed=embed)
+            game.interaction = interaction
