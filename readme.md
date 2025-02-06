@@ -1,5 +1,5 @@
 # very_useful_bot
-[v1.6 Beta 1](#changelog)  
+[v1.6 Beta 1.1](#changelog)  
 2025.2.7  
 
 如同名稱，這是一個非常有用的Discord機器人，以下是主打的功能：
@@ -73,10 +73,11 @@ VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有�
 
 ## Changelog
 
-Latest: 1.6 Beta 1
+Latest: 1.6 Beta 1.1
 
 ### v1.6 Notice Update
-- [1.6 Beta 1]() Token is now a seperate file, Reorganized all the files (Put data in `assets` folder, renamed `codes.py` to `oj.py`)
+- [1.6 Beta 1.1]() Removed `runcode.sh`
+- [1.6 Beta 1](https://github.com/dfficult/very_useful_bot/commit/0b451bfbc8d80d88682abdf2cc80a6255d0e7c29) Token is now a seperate file, Reorganized all the files (Put data in `assets` folder, renamed `codes.py` to `oj.py`)
 
 ### v1.5 FlashCard, Wordle, and Calculator
 - [1.5.3.01](https://github.com/dfficult/very_useful_bot/commit/ebe4429aee3f8b719e3b20cbeb88e701b7b62a43) Wordle: Fixed sometimes it does not show image properly
