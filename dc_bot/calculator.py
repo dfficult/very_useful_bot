@@ -49,7 +49,7 @@ class Calculator(View):
                 )
                 global blacklist
                 blacklist.append(interaction.user.name)
-                with open("calculator_blacklist.txt", "w") as file:
+                with open("assets/calculator_blacklist.txt", "w") as file:
                     for item in blacklist:
                         file.write(f"{item}\n")
                 await interaction.message.delete()
@@ -82,7 +82,7 @@ class Calculator(View):
             embed.description = f"# ```{args[0]}```"
         await interaction.response.edit_message(embed=embed, view=self)
 
-with open("calculator_blacklist.txt", "r") as file:
+with open("assets/calculator_blacklist.txt", "r") as file:
     blacklist = [line.strip() for line in file]
 
 

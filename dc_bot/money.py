@@ -24,7 +24,7 @@ async def mlend(interaction: discord.Interaction, user: discord.User, amount: in
     # 5:6 -> 5:06
     this["minute"] = f"0{this['minute']}" if len(str(this["minute"])) == 1 else this["minute"]
 
-    with open("money.json", "r") as f:
+    with open("assets/money.json", "r") as f:
         data = json.load(f)
     
     if creditor in data:
@@ -32,7 +32,7 @@ async def mlend(interaction: discord.Interaction, user: discord.User, amount: in
     else:
         data[creditor] = [this]
     
-    with open("money.json", "w") as f:
+    with open("assets/money.json", "w") as f:
         f.write(json.dumps(data, indent=4))
     
     embed = discord.Embed(
@@ -55,7 +55,7 @@ async def mhistory(interaction: discord.Interaction):
         color=discord.Color.green()
     )
     
-    with open("money.json", "r") as f:
+    with open("assets/money.json", "r") as f:
         data = json.load(f)
     
     j = 1
@@ -82,14 +82,14 @@ async def mdelete(interaction: discord.Interaction, option: int):
     
     creditor: str = str(interaction.user)
     
-    with open("money.json", "r") as f:
+    with open("assets/money.json", "r") as f:
         data = json.load(f)
     
 
     if creditor in data:
         try:
             del data[creditor][option]
-            with open("money.json", "w") as f:
+            with open("assets/money.json", "w") as f:
                 f.write(json.dumps(data, indent=4))
             await interaction.response.send_message("紀錄刪除成功")
         except Exception as e:

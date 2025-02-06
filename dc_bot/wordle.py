@@ -128,10 +128,10 @@ async def wordle(interaction: discord.Interaction, guess: str):
     
     # Wordlist
     # Possible answers, taken from here: https://gist.github.com/cfreshman/a03ef2cba789d8cf00c08f767e0fad7b
-    with open("wordle/answers.txt", "r") as f:
+    with open("assets/wordle/answers.txt", "r") as f:
         answer_list = [i.strip() for i in f.readlines()]
     # Allowed guesses (Seperated to prevent least seen words to be the answer), taken from here: https://gist.github.com/cfreshman/40608e78e83eb4e1d60b285eb7e9732f
-    with open("wordle/allowed_guesses.txt", "r") as f:
+    with open("assets/wordle/allowed_guesses.txt", "r") as f:
         allowed_guesses = [i.strip() for i in f.readlines()]
     # Join game
     global playerdata

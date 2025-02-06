@@ -1,4 +1,3 @@
-# === codes.py ===
 import discord
 from discord import app_commands
 from discord.app_commands import Choice
@@ -27,7 +26,7 @@ class SubmitWindow(discord.ui.Modal, title="提交程式碼"):
     async def on_submit(self, interaction: discord.Interaction):
         # load the data about this test
         global id_global #[difficulty, id]
-        with open(f"code_test/{id_global[0]}/{id_global[1]}.json", "r") as file:
+        with open(f"assets/code_test/{id_global[0]}/{id_global[1]}.json", "r") as file:
            question = json.load(file)
         
         # prepare for discord embed
@@ -40,14 +39,14 @@ class SubmitWindow(discord.ui.Modal, title="提交程式碼"):
         # save the code
         global lang
         codes = self.codes.value
-        with open(f"test.{lang}", "w") as file:
+        with open(f"assets/run_code/test.{lang}", "w") as file:
             file.write(codes)
 
         # interaction must be sent within 3 seconds, so we need this
         await interaction.response.defer(thinking=True)
 
         # compile the code
-        result = subprocess.run(["bash", f"run_code/compile_{lang}.sh"], capture_output=True, text=True)
+        result = subprocess.run(["bash", f"assets/run_code/compile_{lang}.sh"], capture_output=True, text=True)
         if result.stderr:
             # An error occurred
             embed.title = "Compile Error"
@@ -62,10 +61,10 @@ class SubmitWindow(discord.ui.Modal, title="提交程式碼"):
         errors = ["0"]*amount    # wrong output
         for i in range(amount):
             # load input data
-            with open("input.txt", "w") as file:
+            with open("assets/run_code/input.txt", "w") as file:
                 file.write(question["tests"][i]["input"])
             # let's run it
-            runcode_path = f"run_code/run_{lang}.sh"
+            runcode_path = f"assets/run_code/run_{lang}.sh"
             result = subprocess.run(["bash", runcode_path], capture_output=True, text=True)
             # check the result
             if result.stderr:
@@ -110,13 +109,13 @@ class SubmitWindow(discord.ui.Modal, title="提交程式碼"):
 )
 async def code(interaction: discord.Interaction, difficulty: Choice[int], id: Optional[int]):
     if not id:
-        with open(f"code_test/{difficulty.value}/last_id.txt", "r", encoding="utf-8") as f:
+        with open(f"assets/code_test/{difficulty.value}/last_id.txt", "r", encoding="utf-8") as f:
             content = int(f.read())
             if content == 0:
                 await interaction.response.send_message("此難易度尚未有題目")
                 return
             id = random.randint(1,content)
-    file_path = f"code_test/{difficulty.value}/{id}.json"
+    file_path = f"assets/code_test/{difficulty.value}/{id}.json"
 
     if os.path.exists(file_path):
         with open(file_path, "r") as file:
@@ -160,7 +159,7 @@ async def code(interaction: discord.Interaction, difficulty: Choice[int], id: Op
     ]
 )
 async def submit_code(interaction: discord.Interaction, difficulty: Choice[int], id: int, language: Choice[str]):
-    file_path = f"code_test/{difficulty.value}/{id}.json"
+    file_path = f"assets/code_test/{difficulty.value}/{id}.json"
     if os.path.exists(file_path):
        global id_global, lang
        id_global = [difficulty.value, id]
@@ -204,12 +203,12 @@ class NewCodeQWindow(discord.ui.Modal, title="新增一個題目"):
         
         # save the file
         difficulty = to_check["difficulty"]
-        with open(f"code_test/{difficulty}/last_id.txt", "r") as f:
+        with open(f"assets/code_test/{difficulty}/last_id.txt", "r") as f:
             last_id = int(str(f.read()))
         last_id += 1
-        with open(f"code_test/{difficulty}/last_id.txt", "w") as f:
+        with open(f"assets/code_test/{difficulty}/last_id.txt", "w") as f:
             f.write(str(last_id))
-        with open(f"code_test/{difficulty}/{last_id}.json", "w") as f:
+        with open(f"assets/code_test/{difficulty}/{last_id}.json", "w") as f:
             f.write(json.dumps(to_check, indent=4, ensure_ascii=False))
             
         await interaction.response.send_message(f"已新增題目，你的題目id是`{last_id}` (`{diffToName(difficulty)}`)")

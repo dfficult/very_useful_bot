@@ -8,7 +8,7 @@ import datetime, json
 # --- All the notice events are stored here ---
 events = []
 def sync_json():
-    with open("notice.json", "w") as f:
+    with open("assets/notice.json", "w") as f:
         f.write(json.dumps(events, indent=4))
 
 
@@ -86,7 +86,7 @@ async def delnotice(interaction: discord.Interaction, event: str):
 
 
 # --- load json upon starting veryusefulbot ---
-with open("notice.json", "r") as f:
+with open("assets/notice.json", "r") as f:
     events = json.load(f)
 
 

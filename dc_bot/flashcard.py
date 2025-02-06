@@ -70,7 +70,7 @@ class FlashCardBox(View):
 @app_commands.describe(wordlist="選擇單字清單", index="[Optional] 從第幾個單字開始")
 
 async def flashcard(interaction: discord.Interaction, wordlist: Choice[str], index: Optional[int]):
-    with open(f"flashcard/{wordlist.value}", "r") as f:
+    with open(f"assets/flashcard/{wordlist.value}", "r") as f:
         word_list = json.load(f)
     
     if not index: index = 0
