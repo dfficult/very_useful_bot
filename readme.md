@@ -1,11 +1,14 @@
 # very_useful_bot
-[v1.6 Beta 1.1](#changelog)  
+[v1.6 Beta 2.1](#changelog)  
 2025.2.7  
 
 如同名稱，這是一個非常有用的Discord機器人，以下是主打的功能：
 
 - ### Wordle
-    最好玩的Wordle遊戲現在在Discord上就能玩，而且一天可以玩無限次
+    在Discord上就能玩的Wordle小遊戲
+    > - 一天可玩無限次  
+    > - 有獲勝統計紀錄  
+    > - 可多人同時遊玩不影響  
 
 - ### C++ Online Judge (線上解題系統)
     一個在Discord上的OJ系統，目前只支援C++
@@ -76,7 +79,9 @@ VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有�
 Latest: 1.6 Beta 1.1
 
 ### v1.6 Notice Update
-- [1.6 Beta 1.1]() Removed `runcode.sh`
+- [1.6 Beta 2.1]() Updated `readme.md`
+- [1.6 Beta 2](https://github.com/dfficult/very_useful_bot/commit/00674c1d709546fe6cf40146b8e106ede515b8ff) Wordle: Added stats to wordle, Edit message by getting message instead of interaction.edit_original_response
+- [1.6 Beta 1.1](https://github.com/dfficult/very_useful_bot/commit/8847221d368e1cc555501f00d18972904e464c02) Removed `runcode.sh`
 - [1.6 Beta 1](https://github.com/dfficult/very_useful_bot/commit/0b451bfbc8d80d88682abdf2cc80a6255d0e7c29) Token is now a seperate file, Reorganized all the files (Put data in `assets` folder, renamed `codes.py` to `oj.py`)
 
 ### v1.5 FlashCard, Wordle, and Calculator
