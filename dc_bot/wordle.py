@@ -1,7 +1,7 @@
 import discord
 from discord import app_commands, File
 from PIL import Image, ImageDraw, ImageFont
-import random, io
+import random, io, json
 
 
 # Settings (DO NOT CHANGE, DIFFERENT VALUE HAVE NOT TESTED YET)
@@ -43,15 +43,15 @@ def bubble_sort(to_sort: list) -> None:
 
 
 class Wordle:
-    def __init__(self, interaction: discord.Interaction, player, answer):
-        self.player = player
-        self.interaction = interaction
-        self.guesses = []
-        self.color = []
-        self.answer = answer
-        self.correct = []
-        self.wrong_place = []
-        self.incorrect = []
+    def __init__(self, player, answer):
+        self.player = player     # player id
+        self.msg = None          # the message to edit, update upon first guess message sending
+        self.guesses = []        # store the guesses
+        self.color = []          # store the colors in rgb format
+        self.answer = answer     # the answer
+        self.correct = []        # store the green letters
+        self.wrong_place = []    # store the yellow letters
+        self.incorrect = []      # store the gray letters
         self.left = [chr(i) for i in range(ord('A'), ord('Z')+1)] # A to Z
     
     def guess(self, guess: str) -> int:
@@ -145,7 +145,7 @@ async def wordle(interaction: discord.Interaction, guess: str):
         # Randomly select an answer
         word = answer_list[random.randint(0, len(answer_list)-1)]
         answer = turn_lower_to_upper(word)
-        game = Wordle(interaction = interaction, player = interaction.user.name, answer = answer)
+        game = Wordle(player = interaction.user.name, answer = answer)
         playerdata.append(game)
 
     
@@ -252,32 +252,68 @@ async def wordle(interaction: discord.Interaction, guess: str):
     
 
     # Win/Lose Detection
-    if result == 1:
-        embed.description = "你贏了"
-        for i in range(len(playerdata)):
-            if playerdata[i].player == interaction.user.name:
-                playerdata.pop(i)
-    elif result == 2:
-        embed.description = f"你輸了，正確答案是**{game.answer}**"
-        for i in range(len(playerdata)):
-            if playerdata[i].player == interaction.user.name:
-                playerdata.pop(i)
-    else:
+    if result not in [1, 2]:
+        # Not win or lose, continue the game
         embed.add_field(name="位置正確", value="".join(i for i in game.correct))
         embed.add_field(name="位置錯誤", value="".join(i for i in game.wrong_place))
         embed.add_field(name="猜測錯誤", value="".join(i for i in game.incorrect))
         embed.add_field(name="尚未嘗試", value="".join(i for i in game.left))
+    else:
+        # result = 1: win
+        # result = 2: lose
+        embed.description = f"你輸了，答案為{game.answer}" if result-1 else "你贏了"
+        
+        # update stats
+        with open("assets/stats.json", 'r') as f:
+            stats = json.load(f)
+        stats["wordle"]["times_played"] += 1
+        try:
+            player = stats["wordle"]["players"][f"{game.player}"]
+            player["played"] += 1
+        except:
+            stats["wordle"]["players"].setdefault(f"{game.player}", {
+                "played": 1,
+                "win": 0,
+                "lose": 0,
+                "streak": 0
+            })
+            player = stats["wordle"]["players"][f"{game.player}"]
+        if result == 1:  # win
+            player["win"] += 1
+            player["streak"] += 1
+        else:            # lose
+            player["lose"] += 1
+            player["streak"] = 0
+        
+        # write back stats
+        with open("assets/stats.json", "w") as f:
+            f.write(json.dumps(stats, indent=4))
 
+        # print stats
+        embed.add_field(name="遊玩次數", value=player["played"])
+        embed.add_field(name="獲勝次數", value=player["win"])
+        embed.add_field(name="獲勝率", value=f"{round(player['win']/player['played']*100, 2)}%")
+        embed.add_field(name="連勝次數", value=player["streak"])
+
+        # remove player data from playerdata
+        for i in range(len(playerdata)):
+            if playerdata[i].player == interaction.user.name:
+                playerdata.pop(i)
+        
 
     # Send Results
     if len(game.guesses) == 1:
         await interaction.response.send_message(file=File(buffer, 'myimage.png'), embed=embed)
+        message = await interaction.original_response()
+        game.msg = message
     else:
         try:
-            await game.interaction.edit_original_response(attachments=[File(buffer, 'myimage.png')], embed=embed)
+            message = await game.msg.channel.fetch_message(game.msg.id)  # get message
+            await message.edit(attachments=[File(buffer, 'myimage.png')], embed=embed)
             await interaction.response.send_message("已上傳猜測，請查看原始訊息", delete_after=DELETE_AFTER)
         except Exception as e:
             print(e)
             buffer.seek(0)  # Reset position again before trying to send the second time
             await interaction.response.send_message(f"發生錯誤 {e}，請回報此問題", file=File(buffer, 'myimage.png'), embed=embed)
-            game.interaction = interaction
+            message = await interaction.original_response()
+            game.msg = message
