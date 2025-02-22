@@ -1,6 +1,6 @@
 # very_useful_bot
-[v1.6 Beta 2.1](#changelog)  
-2025.2.7  
+[v1.6 Beta 3](#changelog)  
+2025.2.22  
 
 如同名稱，這是一個非常有用的Discord機器人，以下是主打的功能：
 
@@ -62,7 +62,7 @@ VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有�
 `/daysleft` [`/today`](manual/others.md/#today)
 
 ### 提醒
-[`/notice`](manual/notice.md/#notice) `/delnotice`
+[`/notice_after`](manual/notice.md/#notice) `/notice_at` `/notice_delete`
 
 ### OJ
 `/code` [`/new_code_q`](manual/oj_create.md) `/submit_code`
@@ -79,7 +79,8 @@ VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有�
 Latest: 1.6 Beta 1.1
 
 ### v1.6 Notice Update
-- [1.6 Beta 2.1]() Updated `readme.md`
+- [1.6 Beta 3]() Updated notice system, Minor fixes to wordle.py and eat.py
+- [1.6 Beta 2.1](https://github.com/dfficult/very_useful_bot/commit/10ea36ca48434768c5f14187c06a35c87bdb936e) Updated `readme.md`
 - [1.6 Beta 2](https://github.com/dfficult/very_useful_bot/commit/00674c1d709546fe6cf40146b8e106ede515b8ff) Wordle: Added stats to wordle, Edit message by getting message instead of interaction.edit_original_response
 - [1.6 Beta 1.1](https://github.com/dfficult/very_useful_bot/commit/8847221d368e1cc555501f00d18972904e464c02) Removed `runcode.sh`
 - [1.6 Beta 1](https://github.com/dfficult/very_useful_bot/commit/0b451bfbc8d80d88682abdf2cc80a6255d0e7c29) Token is now a seperate file, Reorganized all the files (Put data in `assets` folder, renamed `codes.py` to `oj.py`)

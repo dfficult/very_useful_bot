@@ -93,8 +93,9 @@ async def vubhelp(interaction: discord.Interaction):
 # --- Add all commands to the bot ---
 bot.tree.add_command(vubhelp)
 # notice.py
-bot.tree.add_command(notice)
-bot.tree.add_command(delnotice)
+bot.tree.add_command(notice_after)
+bot.tree.add_command(notice_at)
+bot.tree.add_command(notice_delete)
 # code.py
 bot.tree.add_command(code)
 bot.tree.add_command(submit_code)

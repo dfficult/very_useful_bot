@@ -159,35 +159,8 @@ async def wordle(interaction: discord.Interaction, guess: str):
     # Quit game detection
     if guess == "QUIT":
         # End the game
-        for i in range(len(playerdata)):
-            if playerdata[i].player == interaction.user.name:
-                playerdata.pop(i)
+        playerdata = [i for i in playerdata if i.player != interaction.user.name]
         await interaction.response.send_message(f"答案是{game.answer}，已結束遊戲", delete_after=DELETE_AFTER)
-        return
-    # Debug mode
-    if guess == "DEBG":
-        # For debug purpose only
-        embed = discord.Embed(
-            title="Debug Mode",
-            description="For debug purpose only.",
-            color=discord.Color.dark_red()
-        )
-        embed.add_field(name="player", value=game.player)
-        embed.add_field(name="answer", value=game.answer)
-        embed.add_field(name="attempts count", value=len(game.guesses))
-        for i in range(len(game.guesses)):
-            color = []
-            for j in range(WORD_LENGTH):
-                match game.color[i][j]:
-                    case (58, 58, 60): color.append('B')
-                    case (181, 159, 59): color.append('Y')
-                    case (83, 141, 78): color.append('G')
-            embed.add_field(name=f"attempt {i+1}", value=f"{''.join(j for j in game.guesses[i])} / {''.join(j for j in color)}")
-        embed.add_field(name="correct", value="".join(j for j in game.correct))
-        embed.add_field(name="wrong_place", value="".join(j for j in game.wrong_place))
-        embed.add_field(name="incorrect", value="".join(j for j in game.incorrect))
-        embed.add_field(name="left", value="".join(j for j in game.left))
-        await interaction.response.send_message(embed=embed, ephemeral=True)
         return
     # Word length detection
     if len(guess) != WORD_LENGTH:
@@ -254,9 +227,12 @@ async def wordle(interaction: discord.Interaction, guess: str):
     # Win/Lose Detection
     if result not in [1, 2]:
         # Not win or lose, continue the game
-        embed.add_field(name="位置正確", value="".join(i for i in game.correct))
-        embed.add_field(name="位置錯誤", value="".join(i for i in game.wrong_place))
-        embed.add_field(name="猜測錯誤", value="".join(i for i in game.incorrect))
+        if len([i for i in game.correct]) != 0:
+            embed.add_field(name="位置正確", value="".join(i for i in game.correct))
+        if len([i for i in game.wrong_place]) != 0:
+            embed.add_field(name="位置錯誤", value="".join(i for i in game.wrong_place))
+        if len([i for i in game.incorrect]) != 0:
+            embed.add_field(name="猜測錯誤", value="".join(i for i in game.incorrect))
         embed.add_field(name="尚未嘗試", value="".join(i for i in game.left))
     else:
         # result = 1: win
@@ -296,9 +272,7 @@ async def wordle(interaction: discord.Interaction, guess: str):
         embed.add_field(name="連勝次數", value=player["streak"])
 
         # remove player data from playerdata
-        for i in range(len(playerdata)):
-            if playerdata[i].player == interaction.user.name:
-                playerdata.pop(i)
+        playerdata = [i for i in playerdata if i.player != interaction.user.name]
         
 
     # Send Results

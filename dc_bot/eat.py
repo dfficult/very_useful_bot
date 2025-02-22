@@ -14,7 +14,7 @@ ends = ["吧","是個不錯的選擇","的吧","就對了","呢?","\n(應該) �
 @app_commands.command(name="eat", description=f"[隨機] 從食物清單中挑選出一種食物")
 @app_commands.describe(amount="輸入數量")
 async def eat(interaction: discord.Interaction, amount: Optional[Range[int, 1, 30]]):
-    with open("foodlist.txt","r",encoding="UTF-8") as f:
+    with open("assets/foodlist.txt","r",encoding="UTF-8") as f:
         contents = f.readlines()
         foodlist = [i.strip() for i in contents]
     if not amount: amount = 1
@@ -35,11 +35,11 @@ async def eat(interaction: discord.Interaction, amount: Optional[Range[int, 1, 3
 @app_commands.command(name="addfood", description=f"[隨機] 新增食物到食物清單")
 @app_commands.describe(food="食物")
 async def addfood(interaction: discord.Interaction, food: str):
-    with open("foodlist.txt","r",encoding="UTF-8") as f:
+    with open("assets/foodlist.txt","r",encoding="UTF-8") as f:
         contents = f.readlines()
         foodlist = [i.strip() for i in contents]
     if food not in foodlist:
-        with open("foodlist.txt","w",encoding="UTF-8") as f:
+        with open("assets/foodlist.txt","w",encoding="UTF-8") as f:
             foodlist.append(food)
             for i in foodlist: f.write(f"{i}\n")
         await interaction.response.send_message(f"成功新增{food}")
