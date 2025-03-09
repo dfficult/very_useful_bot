@@ -1,6 +1,6 @@
 # very_useful_bot
-[v1.6 Beta 3](#changelog)  
-2025.2.22  
+[v1.6.0](#changelog)  
+2025.3.10  
 
 如同名稱，這是一個非常有用的Discord機器人，以下是主打的功能：
 
@@ -11,7 +11,7 @@
     > - 可多人同時遊玩不影響  
 
 - ### C++ Online Judge (線上解題系統)
-    一個在Discord上的OJ系統，目前只支援C++
+    一個在Discord上的OJ系統，目前只支援C和C++
 
 - ### 數學計算
     解決一些高中數學，例如約分分數、行列式、向量的內外積等。
@@ -25,18 +25,22 @@
 
 
 ## 安裝說明
-> 執行環境：Linux  
-> 需可執行 `gcc` 和 `g++`，才可以使用OJ系統  
+> 運行環境：Linux, macOS, Windows等   
+> **需可執行bash，且可執行 `gcc` 和 `g++`，才可以使用OJ系統**  
 
+以可執行bash的系統為例：
 ```bash
 # 下載 VeryUsefulBot
 git clone https://github.com/dfficult/very_useful_bot
+
 # 安裝額外的 module
-pip3 install discord # Discord模組
-pip3 install pillow  # 使用裡面的PIL模組用於Wordle繪製結果
+pip3 install discord        # Discord模組
+pip3 install pillow         # 使用裡面的PIL模組用於Wordle繪製結果
+
 # 輸入 Token
-cd very_useful_bot/dc_bot/
-nano token.txt       # 然後輸入你的 TOKEN
+cd very_useful_bot/dc_bot/  # 一定要在dc_bot目錄下運行
+echo "MyToken" > token.txt  # 然後輸入你的 TOKEN
+
 # 執行
 python3 main.py
 ```
@@ -59,27 +63,25 @@ VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有�
 [`/eat`](manual/eat.md/#eat) `/addfood` [`dice`](manual/math.md/#dice-faces) [`/rand`](manual/math.md/#rand-items)
 
 ### 日期
-`/daysleft` [`/today`](manual/others.md/#today)
+`/daysleft`
 
 ### 提醒
-[`/notice_after`](manual/notice.md/#notice) `/notice_at` `/notice_delete`
+[`/notice_after`](manual/notice.md/#notice) `/notice_at` `/notice_delete` `/note` `/notice_list`
 
 ### OJ
-`/code` [`/new_code_q`](manual/oj_create.md) `/submit_code`
+`/code` `/submit_code`
 
 ### 數學
 `/average` `/c` `/correlation` `/det2` `/det3` `/factorize` `/invrmtx2` `/p` `/simfrac` `/solve21` `/solve31` `/surface` `/vector` `/vectorl`
 
-### 記帳 (**即將被提醒取代**)
-[`/mdelete`](manual/money.md/#mdelete-option) [`/mhistory`](manual/money.md/#mhistory) [`/mlend`](manual/money.md/#mborrow-user-amount)
-
 
 ## Changelog
 
-Latest: 1.6 Beta 1.1
+Latest: 1.6.0
 
-### v1.6 Notice Update
-- [1.6 Beta 3]() Updated notice system, Minor fixes to wordle.py and eat.py
+### v1.6 OJ and Notice (Again)
+- [1.6.0]() Fixed oj compile error, removed new_code_q/today/mlend/mdelete/mhistory commands, redesigned code, added sticky notes, made embed colors environmental variables
+- [1.6 Beta 3](https://github.com/dfficult/very_useful_bot/commit/2e903e3d92a82bbf0bd582de5f3acf775ccaf59d) Updated notice system, Minor fixes to wordle.py and eat.py
 - [1.6 Beta 2.1](https://github.com/dfficult/very_useful_bot/commit/10ea36ca48434768c5f14187c06a35c87bdb936e) Updated `readme.md`
 - [1.6 Beta 2](https://github.com/dfficult/very_useful_bot/commit/00674c1d709546fe6cf40146b8e106ede515b8ff) Wordle: Added stats to wordle, Edit message by getting message instead of interaction.edit_original_response
 - [1.6 Beta 1.1](https://github.com/dfficult/very_useful_bot/commit/8847221d368e1cc555501f00d18972904e464c02) Removed `runcode.sh`

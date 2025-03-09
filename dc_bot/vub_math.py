@@ -5,6 +5,7 @@ from discord.app_commands import Choice
 import random, math, statistics
 from typing import Optional
 import math_module as m
+import settings
 
 
 # --- Command: simfrac ---
@@ -20,7 +21,7 @@ async def simfrac(interaction: discord.Interaction, a: int, b: int):
     embed = discord.Embed(
         title=t,
         description=f"原分數：{a} / {b}",
-        color=discord.Color.green()
+        color=settings.Colors.math
     )
     embed.add_field(name="以小數表示", value=frac.to_float(), inline=True)
     embed.add_field(name="以百分率表示", value=f"{frac.to_percentage()}%", inline=True)
@@ -37,7 +38,7 @@ async def factorize(interaction: discord.Interaction, n: int):
     embed = discord.Embed(
         title=f"質因數分解{n}：",
         description=t,
-        color=discord.Color.green()
+        color=settings.Colors.math
     )
     await interaction.response.send_message(embed=embed)
 
@@ -65,7 +66,7 @@ async def solve21(interaction: discord.Interaction, eq1:str, eq2: str):
         embed = discord.Embed(
             title=t,
             description=d,
-            color=discord.Color.green()
+            color=settings.Colors.math
         )
         embed.add_field(name=f"第一式",value=eq1,inline=True)
         embed.add_field(name=f"第二式",value=eq2,inline=True)
@@ -74,7 +75,7 @@ async def solve21(interaction: discord.Interaction, eq1:str, eq2: str):
         embed = discord.Embed(
             title="錯誤!",
             description="發生錯誤",
-            color=discord.Color.red()
+            color=settings.Colors.fail
         )
         embed.add_field(name=f"第一式",value=eq1,inline=True)
         embed.add_field(name=f"第二式",value=eq2,inline=True)
@@ -105,7 +106,7 @@ async def solve31(interaction: discord.Interaction, eq1:str, eq2: str, eq3: str)
         embed = discord.Embed(
             title=t,
             description=d,
-            color=discord.Color.green()
+            color=settings.Colors.math
         )
         embed.add_field(name=f"第一式",value=eq1,inline=True)
         embed.add_field(name=f"第二式",value=eq2,inline=True)
@@ -115,7 +116,7 @@ async def solve31(interaction: discord.Interaction, eq1:str, eq2: str, eq3: str)
         embed = discord.Embed(
             title="錯誤!",
             description="發生錯誤",
-            color=discord.Color.red()
+            color=settings.Colors.fail
         )
         embed.add_field(name=f"第一式",value=eq1,inline=True)
         embed.add_field(name=f"第二式",value=eq2,inline=True)
@@ -134,7 +135,7 @@ async def average(interaction: discord.Interaction, items: str):
         result = sum(nums)/len(nums)
         embed=discord.Embed(
             title=f"算術平均：{result}",
-            color=discord.Color.green()
+            color=settings.Colors.math
         )
         for i in range(len(nums)):
             embed.add_field(name=f"第{i+1}個值",value=nums[i],inline=True)
@@ -144,7 +145,7 @@ async def average(interaction: discord.Interaction, items: str):
         embed = discord.Embed(
             title="錯誤!",
             description="輸入的值必須為有理數",
-            color=discord.Color.red()
+            color=settings.Colors.fail
         )
         for i in range(len(nums)):
             embed.add_field(name=f"第{i+1}個值",value=nums[i],inline=True)
@@ -203,7 +204,7 @@ async def correlation(interaction: discord.Interaction, x: str, y: str):
     embed = discord.Embed(
         title="相關係數",
         description=des,
-        color=discord.Color.green()
+        color=settings.Colors.math
     )
     embed.add_field(name="x資料", value=tuple(xi))
     embed.add_field(name="y資料", value=tuple(yi))
@@ -221,7 +222,7 @@ async def rand(interaction: discord.Interaction, items: str, amount: Optional[in
         embed = discord.Embed(
             title=f"隨機：{s}",
             description=items.replace(" ", ", "),
-            color=discord.Color.green()
+            color=settings.Colors.math
         )
     else:
         if amount == 0: amount = random.randint(2,len(choices))
@@ -238,7 +239,7 @@ async def rand(interaction: discord.Interaction, items: str, amount: Optional[in
         embed = discord.Embed(
             title=f"隨機取{amount}個：{s}",
             description=items.replace(" ", ", "),
-            color=discord.Color.green()
+            color=settings.Colors.math
         )  
     await interaction.response.send_message(embed=embed)
 
@@ -262,7 +263,7 @@ async def p(interaction: discord.Interaction, n: int, k: int):
         embed = discord.Embed(
             title="錯誤!",
             description="輸入的值必須<50",
-            color=discord.Color.red()
+            color=settings.Colors.fail
         )
         embed.add_field(name="n值(正整數)",value=n,inline=True)
         embed.add_field(name="k值(正整數)",value=k,inline=True)
@@ -274,7 +275,7 @@ async def p(interaction: discord.Interaction, n: int, k: int):
         embed = discord.Embed(
             title="錯誤!",
             description="輸入的值必須為正整數",
-            color=discord.Color.red()
+            color=settings.Colors.fail
         )
         embed.add_field(name="n值(正整數)",value=n,inline=True)
         embed.add_field(name="k值(正整數)",value=k,inline=True)
@@ -284,7 +285,7 @@ async def p(interaction: discord.Interaction, n: int, k: int):
         embed = discord.Embed(
             title=f"排列：{result}種",
             description=f"P({n}, {k})",
-            color=discord.Color.green()
+            color=settings.Colors.math
         )
         await interaction.response.send_message(embed=embed)
 
@@ -299,7 +300,7 @@ async def c(interaction: discord.Interaction, n: int, k: int):
         embed = discord.Embed(
             title="錯誤!",
             description=f"輸入的值必須為正整數",
-            color=discord.Color.red()
+            color=settings.Colors.fail
         )
         embed.add_field(name="n值(正整數)",value=n,inline=True)
         embed.add_field(name="k值(正整數)",value=k,inline=True)
@@ -309,7 +310,7 @@ async def c(interaction: discord.Interaction, n: int, k: int):
         embed = discord.Embed(
             title=f"組合：{result}種",
             description=f"C({n}, {k})",
-            color=discord.Color.green()
+            color=settings.Colors.math
         )
         await interaction.response.send_message(embed=embed)
 
@@ -357,7 +358,7 @@ async def vector(
             embed = discord.Embed(
                 title=f"AB向量：{ab}",
                 description=t,
-                color=discord.Color.green()
+                color=settings.Colors.math
             )
             embed.add_field(name="A點", value=a, inline=True)
             embed.add_field(name="B點", value=b, inline=True)
@@ -367,7 +368,7 @@ async def vector(
             a_dot_b = x0*x1 + y0*y1 + z0*z1
             embed = discord.Embed(
                 title=f"內積：{a_dot_b}",
-                color=discord.Color.green()
+                color=settings.Colors.math
             )
             embed.add_field(name="A向量", value=a, inline=True)
             embed.add_field(name="B向量", value=b, inline=True)
@@ -393,7 +394,7 @@ async def vector(
             embed = discord.Embed(
                 title=f"外積：({o[0]}, {o[1]}, {o[2]})",
                 description=t,
-                color=discord.Color.green()
+                color=settings.Colors.math
             )
             embed.add_field(name="A向量", value=a, inline=True)
             embed.add_field(name="B向量", value=b, inline=True)
@@ -414,7 +415,7 @@ async def vectorl(interaction: discord.Interaction, x: int, y: int, z: int):
 
         embed = discord.Embed(
             title=t,
-            color=discord.Color.green()
+            color=settings.Colors.math
         )
         embed.add_field(name="向量", value=f"({x}, {y}, {z})", inline=True)
         await interaction.response.send_message(embed=embed)  
@@ -439,7 +440,7 @@ async def surface(
     surf = f"{nx}x{'+' if ny>0 else ''}{ny}y{'+' if nz>0 else ''}{nz}z={d}"
     embed = discord.Embed(
         title=f"平面(未化簡)：{surf}",
-        color=discord.Color.green()
+        color=settings.Colors.math
     )
     embed.add_field(name="法向量", value=f"({nx}, {ny}, {nz})", inline=True)
     embed.add_field(name="任一點", value=f"({x}, {y}, {z})", inline=True)
@@ -477,7 +478,7 @@ async def det3(
         title=f"行列式：{result}",
         description=
         f"|{a1: {width}d} {a2: {width}d} {a3: {width}d}|\n|{b1: {width}d} {b2: {width}d} {b3: {width}d}|\n|{c1: {width}d} {c2: {width}d} {c3: {width}d}|",
-        color=discord.Color.green()
+        color=settings.Colors.math
     )
     await interaction.response.send_message(embed=embed)
 
@@ -506,7 +507,7 @@ async def det2(
         title=f"行列式：{result}",
         description=
         f"|{a1: {width}d} {a2: {width}d}|\n|{b1: {width}d} {b2: {width}d}|",
-        color=discord.Color.green()
+        color=settings.Colors.math
     )
     await interaction.response.send_message(embed=embed)
 
@@ -553,7 +554,7 @@ async def invrmtx2(
         title="此矩陣有反矩陣" if has_invr else "此矩陣沒有反矩陣",
         description=
         f"原矩陣：\n⌈{a: {width}d} {b: {width}d}⌉\n⌊{c: {width}d} {d: {width}d}⌋",
-        color=discord.Color.green()
+        color=settings.Colors.math
     )
     if has_invr:
         embed.description += f"\n反矩陣：\n⌈{a1} {b1}⌉\n⌊{c1} {d1}⌋"

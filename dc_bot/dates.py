@@ -28,28 +28,6 @@ def is_vaild_date(year: int, month: int, date: int) -> bool:
         return True
 
 
-# --- Command: today ---
-@app_commands.command(name="today", description="[日期] 顯示今天")
-async def today(interaction: discord.Interaction):
-    now = datetime.datetime.now()
-    weekdays = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]
-    
-    if is_leap(now.year):
-        y = 366
-    else:
-        y = 365
-    december_31 = datetime.datetime(datetime.datetime.now().year - 1, 12, 31)
-    now = datetime.datetime.now()
-    days_passed = (now - december_31).days
-    percentage = round(days_passed / y * 100, 2)
-
-    embed = discord.Embed(
-        title="今天是",
-        description=f"{now.year}年{now.month}月{now.day}日  {weekdays[now.weekday()]}\n今年已經過了 {percentage}%"
-    )
-    await interaction.response.send_message(embed=embed)
-
-
 # --- Command: daysleft ---
 @app_commands.command(name="daysleft", description="[日期] 新增日期倒數")
 @app_commands.describe(

@@ -3,13 +3,13 @@ from discord.ext import commands, tasks
 try:
     from eat import *
     from vub_math import *
-    from money import *
     from dates import *
     from oj import *
     from notice import *
     from flashcard import *
     from calculator import *
     from wordle import *
+    import settings
 except FileNotFoundError as e:
     print(f"Error: Wrong Directory {e}")
     print("  Please run 'main.py' in the '/dc_bot' directory")
@@ -62,8 +62,9 @@ async def sync_task_to_minute():
 async def on_ready():
     slash = await bot.tree.sync()
     print(f"{bot.user} 已成功登入，並已載入{len(slash)}個指令")
+    await bot.change_presence(activity=settings.Activity.playing)
     # await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="YouTube"))
-    await bot.change_presence(activity=discord.Game(name="Wordle"))
+    # await bot.change_presence(activity=discord.Game(name="Wordle"))
     # await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="Never Gonna Give You Up"))
     await sync_task_to_minute()
 
@@ -96,12 +97,12 @@ bot.tree.add_command(vubhelp)
 bot.tree.add_command(notice_after)
 bot.tree.add_command(notice_at)
 bot.tree.add_command(notice_delete)
+bot.tree.add_command(note_list)
+bot.tree.add_command(note)
 # code.py
 bot.tree.add_command(code)
 bot.tree.add_command(submit_code)
-bot.tree.add_command(new_code_q)
 # dates.py
-bot.tree.add_command(today)
 bot.tree.add_command(daysleft)
 # eat.py
 bot.tree.add_command(eat)
@@ -123,10 +124,6 @@ bot.tree.add_command(det2)
 bot.tree.add_command(invrmtx2)
 bot.tree.add_command(p)
 bot.tree.add_command(c)
-# money.py
-bot.tree.add_command(mlend)
-bot.tree.add_command(mhistory)
-bot.tree.add_command(mdelete)
 # flashcard.py
 bot.tree.add_command(flashcard)
 # calculator.py

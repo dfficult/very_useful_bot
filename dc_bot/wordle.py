@@ -2,6 +2,7 @@ import discord
 from discord import app_commands, File
 from PIL import Image, ImageDraw, ImageFont
 import random, io, json
+import settings
 
 
 # Settings (DO NOT CHANGE, DIFFERENT VALUE HAVE NOT TESTED YET)
@@ -220,7 +221,7 @@ async def wordle(interaction: discord.Interaction, guess: str):
     embed = discord.Embed(
         title=f"猜測 {len(game.guesses)}/{ATTEMPS}",
         description="",
-        color=discord.Color.green()
+        color=settings.Colors.wordle
     )
     
 
@@ -238,6 +239,7 @@ async def wordle(interaction: discord.Interaction, guess: str):
         # result = 1: win
         # result = 2: lose
         embed.description = f"你輸了，答案為{game.answer}" if result-1 else "你贏了"
+        embed.color = settings.Colors.fail if result-1 else settings.Colors.success
         
         # update stats
         with open("assets/stats.json", 'r') as f:

@@ -3,11 +3,7 @@ import discord
 from discord import app_commands
 from discord.app_commands import Choice, Range
 import datetime, json
-
-
-
-# --- Settings ---
-NOTICE_COLOR = discord.Color.dark_magenta()
+import settings
 
 
 
@@ -26,7 +22,7 @@ def pre_zero(tofix: int) -> str:
         return str (tofix)
 
 
-# --- Command: notice ---
+# --- Command: notice_after ---
 @app_commands.command(name="notice_after", description="[提醒] 在一段時間後提醒")
 @app_commands.describe(event="輸入事件名稱", time="輸入時間", unit="時間單位")
 @app_commands.choices(
@@ -51,6 +47,7 @@ async def notice_after(interaction: discord.Interaction, event: str, time: Range
 
     # save target
     tar = {
+        "note": 0,
         "year": target.year,
         "month": target.month,
         "day": target.day,
@@ -71,14 +68,14 @@ async def notice_after(interaction: discord.Interaction, event: str, time: Range
         title="已設置提醒",
         description=f"## {event}",
         timestamp=datetime.datetime.now(),
-        color=NOTICE_COLOR
+        color=settings.Colors.notice
     )
     embed.add_field(name="觸發提醒", value=after)
     embed.add_field(name="提醒時間", value=f"{target.year}/{target.month}/{target.day} {pre_zero(target.hour)}:{pre_zero(target.minute)}")
     await interaction.response.send_message(embed=embed)
 
 
-# --- Command: notice ---
+# --- Command: notice_at ---
 @app_commands.command(name="notice_at", description="[提醒] 在特定時間提醒")
 @app_commands.describe(event="輸入事件名稱", year="年", month="月", day="日")
 @app_commands.choices(
@@ -94,6 +91,7 @@ async def notice_at(interaction: discord.Interaction, event: str, year: Choice[i
 
     # save target
     tar = {
+        "note": 0,
         "year": year.value,
         "month": month.value,
         "day": day,
@@ -110,13 +108,13 @@ async def notice_at(interaction: discord.Interaction, event: str, year: Choice[i
         title="提醒已設置",
         description=f"## {event}",
         timestamp=datetime.datetime.now(),
-        color=NOTICE_COLOR
+        color=settings.Settings.Colors.notice
     )
     embed.add_field(name="提醒時間", value=f"{year.value}/{month.value}/{day} {pre_zero(hour)}:{pre_zero(minute)}")
     await interaction.response.send_message(embed=embed)
 
 
-# --- Command: delnotice ---
+# --- Command: notice_delete ---
 class DropDown(discord.ui.Select):
     def __init__(self, user_id):
         selects = [
@@ -140,19 +138,87 @@ class DropDown(discord.ui.Select):
         await interaction.response.defer()
         await interaction.edit_original_response(content="發生了未知的錯誤，請稍後再試", view=None)
 
-
-
 class DropDownView(discord.ui.View):
     def __init__(self, user_id):
         super().__init__()
         self.add_item(DropDown(user_id=user_id))
 
-
-
 @app_commands.command(name="notice_delete", description="[提醒] 選擇提醒事項並刪除")
-@app_commands.describe()
 async def notice_delete(interaction: discord.Interaction):
     await interaction.response.send_message("在下方選單中選擇要刪除的提醒事項", view=DropDownView(interaction.user.id), delete_after=15, ephemeral=True)
+
+
+# --- Command: Note ---
+@app_commands.command(name="note", description="[提醒] 便利貼")
+@app_commands.describe(title="輸入標題", content="輸入要紀錄的內容")
+async def note(interaction: discord.Interaction, title: str, content: str):
+    # check no same name
+    for i in events:
+        if i["event"] == title:
+            await interaction.response.send_message("該提醒事件已存在，請換別的名稱")
+            return
+
+    # check length
+    if len(content) >= 100:
+        await interaction.response.send_message(f"字數過多 ({len(content)}/150)")
+        return
+
+    # save target
+    tar = {
+        "note": 1,
+        "year": datetime.datetime.now().year,
+        "month": datetime.datetime.now().month,
+        "day": datetime.datetime.now().day,
+        "hour": datetime.datetime.now().hour,
+        "minute": datetime.datetime.now().minute,
+        "event": title,
+        "content": content,
+        "user": interaction.user.id
+    }
+    events.append(tar)
+    sync_json()
+
+    embed = discord.Embed(
+        title=title,
+        description=content,
+        color=settings.Colors.notice
+    )
+    await interaction.response.send_message(embed=embed)
+
+# --- Command: note_list
+@app_commands.command(name="note_list", description="[提醒] 顯示我的便利貼與提醒")
+async def note_list(interaction: discord.Interaction):
+    sticky_notes = []
+    notice = discord.Embed(
+        title="提醒事項",
+        description="",
+        color=settings.Colors.notice
+    )
+    have_sticky_notes = False
+    have_notice = False
+    for i in events:
+        if interaction.user.id == i["user"]:
+            if i["note"]:
+                embed = discord.Embed(
+                    title=i["event"],
+                    description=i["content"],
+                    color=settings.Colors.notice
+                )
+                sticky_notes.append(embed)
+                have_sticky_notes = True
+            else:
+                notice.add_field(name=i["event"], value=f"{i['year']}/{i['month']}/{i['day']} {pre_zero(i['hour'])}:{pre_zero(i['minute'])}", inline=False)
+                have_notice = True
+    if have_sticky_notes:
+        await interaction.response.send_message(content="以下是便利貼", embeds=sticky_notes)
+        if have_notice:
+            await interaction.followup.send(content="以下是排程的提醒事項", embed=notice)   
+    elif have_notice:
+        await interaction.response.send_message(content="以下是排程的提醒事項", embed=notice)
+    else:
+        await interaction.response.send_message(content="你沒有排程的提醒事項或便利貼")
+
+
 
 # --- load json upon starting veryusefulbot ---
 with open("assets/notice.json", "r") as f:
@@ -171,6 +237,7 @@ def check_notice():
     success = False
     returnlist = []
     for i in events:
+        if i["note"]: continue
         if (i["year"] == year and
             i["month"] == month and
             i["day"] == day and
@@ -181,7 +248,7 @@ def check_notice():
             embed = discord.Embed(
                 title="提醒",
                 description=f'## {i["event"]}',
-                color=NOTICE_COLOR,
+                color=settings.Colors.notice,
                 timestamp=datetime.datetime.now()
             )
             channel = i["channel"]

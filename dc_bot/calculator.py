@@ -1,7 +1,7 @@
 import discord
 from discord import app_commands
 from discord.ui import Button, View
-
+import settings
 
 
 class Calculator(View):
@@ -45,7 +45,7 @@ class Calculator(View):
                 embed = discord.Embed(
                     title=f"{interaction.user.name}，您已被永久禁止使用計算機",
                     description="違反服務條款：嘗試將數字除以0",
-                    color=discord.Color.red()
+                    color=settings.Colors.fail
                 )
                 global blacklist
                 blacklist.append(interaction.user.name)
@@ -76,7 +76,7 @@ class Calculator(View):
         embed = discord.Embed(
             title="",
             description=f"# ```{self.screen}```",
-            color=discord.Color.yellow()
+            color=settings.Colors.math
         )
         if args:
             embed.description = f"# ```{args[0]}```"
@@ -96,6 +96,6 @@ async def calculator(interaction: discord.Interaction):
     embed = discord.Embed(
         title="",
         description=f"# ```0```",
-        color=discord.Color.yellow()
+        color=settings.Colors.math
     )
     await interaction.response.send_message(embed=embed, view=Calculator())

@@ -4,6 +4,7 @@ from discord import app_commands
 from discord.ui import Button, View
 from discord.app_commands import Choice
 from typing import Optional
+import settings
 
 
 class FlashCardBox(View):
@@ -36,7 +37,7 @@ class FlashCardBox(View):
         embed = discord.Embed(
             title = "",
             description="# " + current['word'] if self.showing_word else "# " + current['meaning'],
-            color=discord.Color.blue() if self.showing_word else discord.Color.green()
+            color= settings.Colors.flashcard if self.showing_word else settings.Colors.fail
         )
         if not self.showing_word:
             embed.description += f"\n {current['word']}"
@@ -80,7 +81,7 @@ async def flashcard(interaction: discord.Interaction, wordlist: Choice[str], ind
     embed = discord.Embed(
         title="",
         description=f"# {word_list[index]['word']}",
-        color=discord.Color.blue()
+        color=settings.Colors.flashcard
     )
     embed.set_footer(text=f"{wordlist.name}  #{index+1}/{len(word_list)}")
 

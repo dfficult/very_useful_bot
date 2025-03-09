@@ -1,37 +1,28 @@
 {
-    "name": "線性變換",
+    "name": "C++基礎1 - 輸入與輸出",
     "difficulty": 0,
-    "from": "Dfficult",
-    "question": "給定一個二階線性變換矩陣A和一個平面向量V，求出向量V線性變換後的向量",
-    "input_format": "第一行，有四個數a11, a12, a21, a22，aij代表矩陣A的第i列第j行\n第二行有兩個數x和y，為向量V的x和y座標\n數值皆小於10^6",
-    "output_format": "輸出向量V線性變換後的向量，以空格隔開x和y值",
+    "from": "Learn C++ with VeryUsefulBot",
+    "question": "輸出文字'Hi '加上輸入的文字(見以下範例)",
+    "input_format": "共一行，為一個字串",
+    "output_format": "'Hi '+ 輸入的字串",
     "examples": [
         {
-            "input": "1 2 3 4\n5 6",
-            "output": "17 39"
+            "input": "VeryUsefulBot",
+            "output": "Hi VeryUsefulBot"
         },
         {
-            "input":"0 1 -1 0\n2024 2025",
-            "output": "2025 -2024"
+            "input": "everyone",
+            "output": "Hi everyone"
         }
     ],
     "tests": [
         {
-            "input": "9 8 7 6\n5 4",
-            "output": "77 59"
+            "input": "world",
+            "output": "Hi world"
         },
         {
-            "input":"0 0 0 0\n98765 43210",
-            "output": "0 0"
-        },
-        {
-            "input": "314 159 265 358\n979 323",
-            "output":"358763 375069"
-        },
-        {
-            "input": "1 0 0 1\n 999999 999999",
-            "output":"999999 999999"
+            "input": "C++",
+            "output": "Hi C++"
         }
     ]
-
 }
