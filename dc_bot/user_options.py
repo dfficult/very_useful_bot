@@ -24,6 +24,7 @@ def is_color(value: str) -> bool:
 defaults = {
     "WordleBackgroundColor": Options("color", "#2E2E34"),
     "WordleBlockSize": Options("int", 50),
+    "WordleBlockMargin": Options("int", 5),
     "WordleFontColor": Options("color", "#FFFFFF"),
     "WordleGrayColor": Options("color", "#3A3A3C"),
     "WordleGreenColor": Options("color", "#538D4E"),

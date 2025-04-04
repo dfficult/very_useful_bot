@@ -5,18 +5,13 @@
 
 以下設定可供更改
 - [`WordleBackgroundColor`]()
+- [`WordleBlockMargin`]()
 - [`WordleBlockSize`]()
 - [`WordleFontColor`]()
 - [`WordleGrayColor`]()
 - [`WordleGreenColor`]()
 - [`WordleImageMargin`]()
 - [`WordleYellowColor`]()
-
-
-### ShowAdvertisement - 是否顯示廣告
-可以決定是否在每一則訊息顯示廣告
-類別: `bool`
-預設: `true`
 
 
 ### WordleAttemps - 更改Wordle猜測次數
@@ -66,7 +61,7 @@
 預設: `#538d4e`
 
 
-### WordleImageMarginRight - 變更Wordle圖片右邊界
+### WordleImageMarginRight - 變更Wordle圖片右邊界 (尚未實裝)
 部分裝置上可能無法一次顯示5個字母，可以透過此指令更改圖片右邊框厚度
 類別: `int`
 預設: `0`

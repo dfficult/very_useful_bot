@@ -219,7 +219,7 @@ async def wordle_guess(interaction: discord.Interaction, guess: str):
                 txt_height = bbox[3] - bbox[1]
                 txt_x = x1 + (WIDTH - txt_width) // 2
                 txt_y = y1 + (HEIGHT - txt_height) // 2
-                draw.txt((txt_x, txt_y), txt, fill=FONT_COLOR, font=font)
+                draw.text((txt_x, txt_y), txt, fill=FONT_COLOR, font=font)
             except:
                 draw.rectangle([x1, y1, x2, y2], fill=GRAY)
             

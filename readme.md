@@ -1,5 +1,5 @@
 # very_useful_bot
-[v1.7.0](#changelog)  
+[v1.7.0.01](#changelog)  
 2025.4.5  
 
 如同名稱，這是一個非常有用的Discord機器人，以下是主打的功能：
@@ -14,10 +14,10 @@
     一個在Discord上的OJ系統，目前只支援C和C++
 
 - ### 數學計算
-    解決一些高中數學，例如約分分數、行列式、向量的內外積等。
+    解決一些簡單數學，例如約分分數、行列式、向量的內外積等。
 
-- ### 吃什麼
-    選出下一餐吃什麼。
+- ### 記帳
+    簡易的記帳系統。
 
 - ### 單字卡
     複習單字的小工具。
@@ -48,7 +48,7 @@ python3 main.py
 ## 所有指令說明
 ( 沒有連結的代表說明還沒寫好 )  
 VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有簡易的指令說明  
-輸入`/vubhelp`會產生Github連結，導向這個頁面
+輸入`/help`會產生Github連結，導向這個頁面
 
 ### Wordle
 `/wordle`
@@ -60,7 +60,7 @@ VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有�
 `/flashcard`
 
 ### 隨機
-[`/eat`](manual/eat.md/#eat) `/addfood` [`dice`](manual/math.md/#dice-faces) [`/rand`](manual/math.md/#rand-items)
+[`/eat`](manual/eat.md/#eat) `/addfood` [`/dice`](manual/math.md/#dice-faces) [`/rand`](manual/math.md/#rand-items)
 
 ### 日期
 `/daysleft`
@@ -72,15 +72,22 @@ VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有�
 `/code` `/submit_code`
 
 ### 數學
-`/average` `/c` `/correlation` `/det2` `/det3` `/factorize` `/invrmtx2` `/p` `/simfrac` `/solve21` `/solve31` `/surface` `/vector` `/vectorl`
+`/average` `/c` `/common_deg_to_rad` `/correlation` `/det2` `/det3` `/factorize` `/invrmtx2` `/p` `/simfrac` `/solve21` `/solve31` `/surface` `/vector` `/vectorl` 
+
+### 記帳
+`/m_new_record` `/m_wallet`
+
+### 其他
+[`/option`](manual/options.md)
 
 
 ## Changelog
 
-Latest: 1.7.0
+Latest: 1.7.0.01
 
 ### v1.7 Big Update
-- [1.7.0]() Multi-Language Support, Expense Tracking System, Right Click Menu, Wordle Send Fix, New Math Command, User Option
+- [1.7.0.01]() Fixed Wordle Fatal Bug, Updated Readme.md
+- [1.7.0](https://github.com/dfficult/very_useful_bot/commit/dcff8de13117bb927f6a0a1edba376a4f5115d81) Multi-Language Support, Expense Tracking System, Right Click Menu, Wordle Send Fix, New Math Command, User Option
 
 ### v1.6 OJ and Notice (Again)
 - [1.6.0](https://github.com/dfficult/very_useful_bot/commit/c3912645dc450a1694cf162abf68971de95962ff) Fixed oj compile error, removed new_code_q/today/mlend/mdelete/mhistory commands, redesigned code, added sticky notes, made embed colors environmental variables
