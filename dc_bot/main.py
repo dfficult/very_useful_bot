@@ -9,24 +9,25 @@ try:
     from flashcard import *
     from calculator import *
     from wordle import *
-    import settings
+    from text_edit import *
+    from expenses import *
+    import settings, user_options
 except FileNotFoundError as e:
-    print(f"Error: Wrong Directory {e}")
-    print("  Please run 'main.py' in the '/dc_bot' directory")
-    print("  To do so, simply enter 'cd dc_bot' after pressing [Enter] to exit\n")
-    input("Press [Enter] to exit ...")
+    print(text("bot.err",e))
+    print(text("bot.wrong_dir.description"))
+    input(text("bot.enter_to_exit"))
     exit()
 
 
 # --- Token ---
 with open("token.txt", "r") as f: token = f.readline()
 if token == "":
-    entered = input("Token not found, please enter your token or press [Enter] to exit: ")
+    entered = input(text("bot.token_notfound"))
     if entered == '':
         exit()
     else:
-        print(f"You entered: {entered}")
-        confirm = input(f"Are you sure you want to use this token? [y/n] ")
+        print(text("bot.token_entered",entered))
+        confirm = input(text("bot.token_confirm"))
         if turn_lower_to_upper(confirm) == 'Y':
             token = entered
             with open("token.txt", 'w') as f: f.write(token)
@@ -61,11 +62,8 @@ async def sync_task_to_minute():
 @bot.event
 async def on_ready():
     slash = await bot.tree.sync()
-    print(f"{bot.user} 已成功登入，並已載入{len(slash)}個指令")
+    print(text("bot.login",bot.user,len(slash)))
     await bot.change_presence(activity=settings.Activity.playing)
-    # await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="YouTube"))
-    # await bot.change_presence(activity=discord.Game(name="Wordle"))
-    # await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="Never Gonna Give You Up"))
     await sync_task_to_minute()
 
 
@@ -77,28 +75,29 @@ async def on_message(message):
     if message.author == bot.user:
         return
     if message.content == "hello world":
-        await message.channel.send("Hello World!")
+        await message.channel.send(text("bot.helloworld"))
 
 
 
 # --- Help command ---
-@app_commands.command(name="vubhelp", description="所有指令說明")
+@app_commands.command(name="help", description=text("cmd.help.description"))
 async def vubhelp(interaction: discord.Interaction):
     embed = discord.Embed(
-        title="歡迎使用 VeryUsefulBot",
-        description="前往指令列表 ➡️ https://www.github.com/dfficult/very_useful_bot"
+        title=text("cmd.help.title"),
+        description=text("cmd.help.text")
     )
     await interaction.response.send_message(embed=embed)
 
 
 # --- Add all commands to the bot ---
 bot.tree.add_command(vubhelp)
+bot.tree.add_command(user_options.option)
 # notice.py
 bot.tree.add_command(notice_after)
 bot.tree.add_command(notice_at)
 bot.tree.add_command(notice_delete)
 bot.tree.add_command(note_list)
-bot.tree.add_command(note)
+bot.tree.add_command(sticky_note)
 # code.py
 bot.tree.add_command(code)
 bot.tree.add_command(submit_code)
@@ -124,13 +123,20 @@ bot.tree.add_command(det2)
 bot.tree.add_command(invrmtx2)
 bot.tree.add_command(p)
 bot.tree.add_command(c)
+bot.tree.add_command(common_deg_to_rad)
 # flashcard.py
 bot.tree.add_command(flashcard)
 # calculator.py
 bot.tree.add_command(calculator)
+bot.tree.add_command(calculate)
 # wordle.py
 bot.tree.add_command(wordle)
-
+bot.tree.add_command(wordle_context_menu)
+# text_edit.py
+bot.tree.add_command(wordcount)
+# expenses.py
+bot.tree.add_command(m_new_record)
+bot.tree.add_command(m_wallet)
 
 # Run the bot
 bot.run(token)

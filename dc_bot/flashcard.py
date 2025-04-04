@@ -5,7 +5,7 @@ from discord.ui import Button, View
 from discord.app_commands import Choice
 from typing import Optional
 import settings
-
+from lang import *
 
 class FlashCardBox(View):
     def __init__(self, current_index, word_list, word_list_name):
@@ -16,9 +16,9 @@ class FlashCardBox(View):
         self.showing_word = True
         
         # Buttons
-        self.previous_button = Button(label="上一個", style=discord.ButtonStyle.secondary)
-        self.toggle_button = Button(label="中/英", style=discord.ButtonStyle.success)
-        self.next_button = Button(label="下一個", style=discord.ButtonStyle.primary)
+        self.previous_button = Button(label=text("flashcard.previous"), style=discord.ButtonStyle.secondary)
+        self.toggle_button = Button(label=text("flashcard.toggle"), style=discord.ButtonStyle.success)
+        self.next_button = Button(label=text("flashcard.next"), style=discord.ButtonStyle.primary)
 
         # Buttons Callback
         self.previous_button.callback = self.previous_flashcard
@@ -61,14 +61,14 @@ class FlashCardBox(View):
 
 
 # --- Command: flashcard ---
-@app_commands.command(name="flashcard", description="[單字卡] 開啟單字卡")
+@app_commands.command(name="flashcard", description=text("cmd.flashcard.description"))
 @app_commands.choices(
     wordlist =[
-        Choice(name="測試", value="測試用單字卡.json")
+        Choice(name=text("cmd.flashcard.example"), value="測試用單字卡.json")
     ]
     
 )
-@app_commands.describe(wordlist="選擇單字清單", index="[Optional] 從第幾個單字開始")
+@app_commands.describe(wordlist=text("cmd.flashcard.wordlist"), index=text("cmd.flashcard.index"))
 
 async def flashcard(interaction: discord.Interaction, wordlist: Choice[str], index: Optional[int]):
     with open(f"assets/flashcard/{wordlist.value}", "r") as f:

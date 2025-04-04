@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ui import Button, View
 import settings
-
+from lang import *
 
 class Calculator(View):
     def __init__(self):
@@ -10,7 +10,7 @@ class Calculator(View):
         self.screen: str = "0"
 
         buttons = [
-            ["(", ")", "⌫", "AC"],# Row 1
+            ["(", ")", text("calculator.backspace"), text("calculator.clear_all")],# Row 1
             ["7", "8", "9", "÷"],  # Row 2
             ["4", "5", "6", "×"],  # Row 3
             ["1", "2", "3", "-"],  # Row 4
@@ -32,9 +32,9 @@ class Calculator(View):
     async def button_callback(self, interaction: discord.Interaction):
         button = interaction.data["custom_id"]
 
-        if button == "AC":
+        if button == text("calculator.clear_all"):
             self.screen = "0"
-        elif button == "⌫":
+        elif button == text("calculator.backspace"):
             self.screen = self.screen[0:len(self.screen)-1]
             if self.screen == '': self.screen = '0'
         elif button == "=":
@@ -43,8 +43,8 @@ class Calculator(View):
                 result = eval(result)
             except ZeroDivisionError:
                 embed = discord.Embed(
-                    title=f"{interaction.user.name}，您已被永久禁止使用計算機",
-                    description="違反服務條款：嘗試將數字除以0",
+                    title=text("calculator.banned", interaction.user.name),
+                    description=text("calculator.banned_reason"),
                     color=settings.Colors.fail
                 )
                 global blacklist
@@ -86,12 +86,12 @@ with open("assets/calculator_blacklist.txt", "r") as file:
     blacklist = [line.strip() for line in file]
 
 
-@app_commands.command(name="calculator", description="[計算機] 開啟計算機")
+@app_commands.command(name="calculator", description=text("cmd.calculator.description"))
 @app_commands.describe()
 async def calculator(interaction: discord.Interaction):
     global blacklist
     if interaction.user.name in blacklist:
-        await interaction.response.send_message("您已被永久禁止使用計算機")
+        await interaction.response.send_message(text("cmd.calculator.banned"))
         return
     embed = discord.Embed(
         title="",
@@ -99,3 +99,15 @@ async def calculator(interaction: discord.Interaction):
         color=settings.Colors.math
     )
     await interaction.response.send_message(embed=embed, view=Calculator())
+
+
+@app_commands.context_menu(name=text("menu.evaluate"))
+async def calculate(interaction: discord.Interaction, message: discord.Message):
+    to_calculate = message.content
+    to_calculate = to_calculate.replace(" ", "")
+    to_calculate = to_calculate.rstrip("=")
+    try:
+        result = eval(to_calculate)
+        await interaction.response.send_message(f"{to_calculate} = **{result}**")
+    except Exception as e:
+        await interaction.response.send_message(text("menu.evaluate.fail", e))

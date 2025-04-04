@@ -3,7 +3,7 @@ import discord
 from discord import app_commands
 from discord.app_commands import Choice
 import datetime
-
+from lang import *
 
 # --- Check if it's a leap year ---
 def is_leap(year: int) -> bool:
@@ -29,17 +29,17 @@ def is_vaild_date(year: int, month: int, date: int) -> bool:
 
 
 # --- Command: daysleft ---
-@app_commands.command(name="daysleft", description="[日期] 新增日期倒數")
+@app_commands.command(name="daysleft", description=text("cmd.daysleft.description"))
 @app_commands.describe(
-    year="輸入年分",
-    month="輸入月份",
-    date="輸入日期",
-    add="包含第一天"
+    year=text("cmd.daysleft.year"),
+    month=text("cmd.daysleft.month"),
+    date=text("cmd.daysleft.date"),
+    add=text("cmd.daysleft.add")
 )
 @app_commands.choices(
     add = [
-        Choice(name="是 (加一天)", value=1),
-        Choice(name="否 (不加一天)", value=0)
+        Choice(name=text("cmd.daysleft.yes"), value=1),
+        Choice(name=text("cmd.daysleft.no"), value=0)
     ]
 )
 async def daysleft(
@@ -50,7 +50,7 @@ async def daysleft(
     add: Choice[int]
 ):
     if not is_vaild_date(year, month, date):
-        await interaction.response.send_message(f"{year}/{month}/{date} 不是一個有效的日期")
+        await interaction.response.send_message(text("cmd.daysleft.not_valid",year,month,date))
     else:
         target = datetime.datetime(year, month, date)
         today = datetime.datetime.now()
@@ -59,8 +59,10 @@ async def daysleft(
         if add.value: days_left += 1
 
         embed = discord.Embed(
-            title=f"剩餘{days_left}天{' (包含第一天)' if add.value else ''}",
-            description=f"目標日期：{year}/{month}/{date}",
+            title=text("cmd.daysleft.left", days_left),
+            description=text("cmd.daysleft.target",year,month,date),
             timestamp=datetime.datetime.now()
         )
+        if add.value:
+            title += text("cmd.daysleft.included")
         await interaction.response.send_message(embed=embed)

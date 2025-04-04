@@ -4,7 +4,7 @@ from discord import app_commands
 from discord.app_commands import Choice, Range
 import datetime, json
 import settings
-
+from lang import *
 
 
 # --- All the notice events are stored here ---
@@ -23,20 +23,20 @@ def pre_zero(tofix: int) -> str:
 
 
 # --- Command: notice_after ---
-@app_commands.command(name="notice_after", description="[提醒] 在一段時間後提醒")
-@app_commands.describe(event="輸入事件名稱", time="輸入時間", unit="時間單位")
+@app_commands.command(name="notice_after", description=text("cmd.notice_after.description"))
+@app_commands.describe(event=text("cmd.notice_after.event"), time=text("cmd.notice_after.time"), unit=text("cmd.notice_after.unit"))
 @app_commands.choices(
     unit=[
-        Choice(name="分鐘", value="m"),
-        Choice(name="小時", value="h"),
-        Choice(name="天", value="d")
+        Choice(name=text("cmd.notice_after.minute"), value="m"),
+        Choice(name=text("cmd.notice_after.hour"), value="h"),
+        Choice(name=text("cmd.notice_after.days"), value="d")
     ]
 )
 async def notice_after(interaction: discord.Interaction, event: str, time: Range[int, 1, 60], unit: Choice[str]):
     # check no same name
     for i in events:
         if i["event"] == event:
-            await interaction.response.send_message("該提醒事件已存在，請換別的名稱")
+            await interaction.response.send_message(text("cmd.notice_after.exist"))
             return
     # calculate target
     now = datetime.datetime.now()
@@ -61,32 +61,32 @@ async def notice_after(interaction: discord.Interaction, event: str, time: Range
     sync_json()
 
     match unit.value:
-        case "m": after = f"{time}分鐘後"
-        case "h": after = f"{time}小時後"
-        case "d": after = f"{time}天後"
+        case "m": after = text("cmd.notice_after.after_mins",time)
+        case "h": after = text("cmd.notice_after.after_hours",time)
+        case "d": after = text("cmd.notice_after.after_days",time)
     embed = discord.Embed(
-        title="已設置提醒",
+        title=text("cmd.notice_after.set"),
         description=f"## {event}",
         timestamp=datetime.datetime.now(),
         color=settings.Colors.notice
     )
-    embed.add_field(name="觸發提醒", value=after)
-    embed.add_field(name="提醒時間", value=f"{target.year}/{target.month}/{target.day} {pre_zero(target.hour)}:{pre_zero(target.minute)}")
+    embed.add_field(name=text("cmd.notice_after.trigger"), value=after)
+    embed.add_field(name=text("cmd.notice_after.trigger_time"), value=f"{target.year}/{target.month}/{target.day} {pre_zero(target.hour)}:{pre_zero(target.minute)}")
     await interaction.response.send_message(embed=embed)
 
 
 # --- Command: notice_at ---
-@app_commands.command(name="notice_at", description="[提醒] 在特定時間提醒")
-@app_commands.describe(event="輸入事件名稱", year="年", month="月", day="日")
+@app_commands.command(name="notice_at", description=text("cmd.notice_at.description"))
+@app_commands.describe(event=text("cmd.notice_at.event"), year=text("cmd.notice_at.year"), month=text("cmd.notice_at.month"), day=text("cmd.notice_at.day"), hour=text("cmd.notice_at.hour"), minute=text("cmd.notice_at.minute"))
 @app_commands.choices(
     year=[Choice(name=i, value=i) for i in range(2025, 2030)],
     month=[Choice(name=i, value=i) for i in range(1, 13)],
 )
-async def notice_at(interaction: discord.Interaction, event: str, year: Choice[int], month: Choice[int], day: Range[int, 1, 31], hour: Range[int, 1, 60], minute: Range[int, 1, 60]):
+async def notice_at(interaction: discord.Interaction, event: str, year: Choice[int], month: Choice[int], day: Range[int, 1, 31], hour: Range[int, 0, 24], minute: Range[int, 0, 60]):
     # check no same name
     for i in events:
         if i["event"] == event:
-            await interaction.response.send_message("該提醒事件已存在，請換別的名稱")
+            await interaction.response.send_message(text("cmd.notice_at.exist"))
             return
 
     # save target
@@ -105,12 +105,12 @@ async def notice_at(interaction: discord.Interaction, event: str, year: Choice[i
     sync_json()
 
     embed = discord.Embed(
-        title="提醒已設置",
+        title=text("cmd.notice_at.set"),
         description=f"## {event}",
         timestamp=datetime.datetime.now(),
-        color=settings.Settings.Colors.notice
+        color=settings.Colors.notice
     )
-    embed.add_field(name="提醒時間", value=f"{year.value}/{month.value}/{day} {pre_zero(hour)}:{pre_zero(minute)}")
+    embed.add_field(name=text("cmd.notice_at.trigger_time"), value=f"{year.value}/{month.value}/{day} {pre_zero(hour)}:{pre_zero(minute)}")
     await interaction.response.send_message(embed=embed)
 
 
@@ -120,8 +120,8 @@ class DropDown(discord.ui.Select):
         selects = [
             discord.SelectOption(label=i["event"], description=f"{i['year']}/{i['month']}/{i['day']} {pre_zero(i['hour'])}:{pre_zero(i['minute'])}", value=i['event']) for i in events if i["user"] == user_id
         ]
-        selects.append(discord.SelectOption(label="取消刪除", description="選取此項關閉刪除選單", value="CANCEL"))
-        super().__init__(placeholder="選擇要刪除的提醒事項", min_values=1, max_values=1, options=selects)
+        selects.append(discord.SelectOption(label=text("cmd.notice_delete.cancel"), description=text("cmd.notice_delete.cancel_des"), value="CANCEL"))
+        super().__init__(placeholder=text("cmd.notice_delete.placeholder"), min_values=1, max_values=1, options=selects)
 
     async def callback(self, interaction: discord.Interaction):
         if self.values[0] == "CANCEL":
@@ -133,34 +133,34 @@ class DropDown(discord.ui.Select):
                 events.remove(i)
                 sync_json()
                 await interaction.response.defer()
-                await interaction.edit_original_response(content=f"已刪除提醒事項：{self.values[0]}", view=None)
+                await interaction.edit_original_response(content=text("cmd.notice_delete.deleted",self.values[0]), view=None)
                 return
         await interaction.response.defer()
-        await interaction.edit_original_response(content="發生了未知的錯誤，請稍後再試", view=None)
+        await interaction.edit_original_response(content=text("cmd.notice_delete.error"), view=None)
 
 class DropDownView(discord.ui.View):
     def __init__(self, user_id):
         super().__init__()
         self.add_item(DropDown(user_id=user_id))
 
-@app_commands.command(name="notice_delete", description="[提醒] 選擇提醒事項並刪除")
+@app_commands.command(name="notice_delete", description=text("cmd.notice_delete.description"))
 async def notice_delete(interaction: discord.Interaction):
-    await interaction.response.send_message("在下方選單中選擇要刪除的提醒事項", view=DropDownView(interaction.user.id), delete_after=15, ephemeral=True)
+    await interaction.response.send_message(text("cmd.notice_delete.select"), view=DropDownView(interaction.user.id), delete_after=15, ephemeral=True)
 
 
-# --- Command: Note ---
-@app_commands.command(name="note", description="[提醒] 便利貼")
-@app_commands.describe(title="輸入標題", content="輸入要紀錄的內容")
-async def note(interaction: discord.Interaction, title: str, content: str):
+# --- Command: sticky_note ---
+@app_commands.command(name="sticky_note", description=text("cmd.sticky_note.description"))
+@app_commands.describe(title=text("cmd.sticky_note.title"), content=text("cmd.sticky_note.content"))
+async def sticky_note(interaction: discord.Interaction, title: str, content: str):
     # check no same name
     for i in events:
         if i["event"] == title:
-            await interaction.response.send_message("該提醒事件已存在，請換別的名稱")
+            await interaction.response.send_message(text("cmd.sticky_note.exist"))
             return
 
     # check length
     if len(content) >= 100:
-        await interaction.response.send_message(f"字數過多 ({len(content)}/150)")
+        await interaction.response.send_message(text("cmd.sticky_note.word_limit",len(content)))
         return
 
     # save target
@@ -186,11 +186,11 @@ async def note(interaction: discord.Interaction, title: str, content: str):
     await interaction.response.send_message(embed=embed)
 
 # --- Command: note_list
-@app_commands.command(name="note_list", description="[提醒] 顯示我的便利貼與提醒")
+@app_commands.command(name="note_list", description=text("cmd.notice_list.description"))
 async def note_list(interaction: discord.Interaction):
     sticky_notes = []
     notice = discord.Embed(
-        title="提醒事項",
+        title=text("cmd.notice_list.title"),
         description="",
         color=settings.Colors.notice
     )
@@ -210,13 +210,13 @@ async def note_list(interaction: discord.Interaction):
                 notice.add_field(name=i["event"], value=f"{i['year']}/{i['month']}/{i['day']} {pre_zero(i['hour'])}:{pre_zero(i['minute'])}", inline=False)
                 have_notice = True
     if have_sticky_notes:
-        await interaction.response.send_message(content="以下是便利貼", embeds=sticky_notes)
+        await interaction.response.send_message(content=text("cmd.notice_list.sticky_notes_below"), embeds=sticky_notes)
         if have_notice:
-            await interaction.followup.send(content="以下是排程的提醒事項", embed=notice)   
+            await interaction.followup.send(content=text("cmd.notice_list.notice_below"), embed=notice)   
     elif have_notice:
-        await interaction.response.send_message(content="以下是排程的提醒事項", embed=notice)
+        await interaction.response.send_message(content=text("cmd.notice_list.notice_below"), embed=notice)
     else:
-        await interaction.response.send_message(content="你沒有排程的提醒事項或便利貼")
+        await interaction.response.send_message(content=text("cmd.notice_list.none"))
 
 
 
@@ -246,7 +246,7 @@ def check_notice():
         ):
             success = True
             embed = discord.Embed(
-                title="提醒",
+                title=text("notice.title"),
                 description=f'## {i["event"]}',
                 color=settings.Colors.notice,
                 timestamp=datetime.datetime.now()

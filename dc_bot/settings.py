@@ -6,6 +6,7 @@ import discord
 
 Version = ""
 TOKEN = ""
+LANG = "zh_TW"
 class Colors:
     notice = discord.Color.dark_magenta()
     food = discord.Color.gold()
@@ -13,6 +14,7 @@ class Colors:
     wordle = discord.Color.teal()
     flashcard = discord.Color.magenta()
     oj = discord.Color.yellow()
+    money = discord.Color.fuchsia()
     fail = discord.Color.red()
     success = discord.Color.green()
 class Activity:

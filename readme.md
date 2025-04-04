@@ -1,6 +1,6 @@
 # very_useful_bot
-[v1.6.0](#changelog)  
-2025.3.10  
+[v1.7.0](#changelog)  
+2025.4.5  
 
 如同名稱，這是一個非常有用的Discord機器人，以下是主打的功能：
 
@@ -77,10 +77,13 @@ VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有�
 
 ## Changelog
 
-Latest: 1.6.0
+Latest: 1.7.0
+
+### v1.7 Big Update
+- [1.7.0]() Multi-Language Support, Expense Tracking System, Right Click Menu, Wordle Send Fix, New Math Command, User Option
 
 ### v1.6 OJ and Notice (Again)
-- [1.6.0]() Fixed oj compile error, removed new_code_q/today/mlend/mdelete/mhistory commands, redesigned code, added sticky notes, made embed colors environmental variables
+- [1.6.0](https://github.com/dfficult/very_useful_bot/commit/c3912645dc450a1694cf162abf68971de95962ff) Fixed oj compile error, removed new_code_q/today/mlend/mdelete/mhistory commands, redesigned code, added sticky notes, made embed colors environmental variables
 - [1.6 Beta 3](https://github.com/dfficult/very_useful_bot/commit/2e903e3d92a82bbf0bd582de5f3acf775ccaf59d) Updated notice system, Minor fixes to wordle.py and eat.py
 - [1.6 Beta 2.1](https://github.com/dfficult/very_useful_bot/commit/10ea36ca48434768c5f14187c06a35c87bdb936e) Updated `readme.md`
 - [1.6 Beta 2](https://github.com/dfficult/very_useful_bot/commit/00674c1d709546fe6cf40146b8e106ede515b8ff) Wordle: Added stats to wordle, Edit message by getting message instead of interaction.edit_original_response
