@@ -571,5 +571,5 @@ async def common_deg_to_rad(interaction: discord.Interaction, angle: Choice[int]
     gcd = math.gcd(angle.value, 180)
     a = angle.value // gcd
     b = 180 // gcd
-    result = f"{a if a != 1 else ''}π{'/'+b if b!= 1 else ''}"
-    await interaction.response.send_message(f"`{angle.value}°` = `{result}`")
+    result = f"{a if a != 1 else ''}π{'/'+str(b) if b != 1 else ''}"
+    await interaction.response.send_message(f"`{angle.value}°` = **`{result}`**")

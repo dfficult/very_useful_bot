@@ -1,5 +1,5 @@
 # very_useful_bot
-[v1.7.0.01](#changelog)  
+[v1.7.0.02](#changelog)  
 2025.4.5  
 
 如同名稱，這是一個非常有用的Discord機器人，以下是主打的功能：
@@ -51,10 +51,10 @@ VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有�
 輸入`/help`會產生Github連結，導向這個頁面
 
 ### Wordle
-`/wordle`
+[`/wordle`](manual/wordle.md)
 
-### 計算機
-`/calculator`
+### 工具
+`/calculator` `/daysleft`
 
 ### 單字卡
 `/flashcard`
@@ -62,8 +62,6 @@ VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有�
 ### 隨機
 [`/eat`](manual/eat.md/#eat) `/addfood` [`/dice`](manual/math.md/#dice-faces) [`/rand`](manual/math.md/#rand-items)
 
-### 日期
-`/daysleft`
 
 ### 提醒
 [`/notice_after`](manual/notice.md/#notice) `/notice_at` `/notice_delete` `/note` `/notice_list`
@@ -83,10 +81,11 @@ VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有�
 
 ## Changelog
 
-Latest: 1.7.0.01
+Latest: 1.7.0.02
 
 ### v1.7 Big Update
-- [1.7.0.01]() Fixed Wordle Fatal Bug, Updated Readme.md
+- [1.7.0.02]() Fixed common_deg_to_rad bug, Updated Readme.md
+- [1.7.0.01](https://github.com/dfficult/very_useful_bot/commit/a60013b8a61c26aa785df2b15287c331e3bce235) Fixed Wordle Fatal Bug, Updated Readme.md
 - [1.7.0](https://github.com/dfficult/very_useful_bot/commit/dcff8de13117bb927f6a0a1edba376a4f5115d81) Multi-Language Support, Expense Tracking System, Right Click Menu, Wordle Send Fix, New Math Command, User Option
 
 ### v1.6 OJ and Notice (Again)
