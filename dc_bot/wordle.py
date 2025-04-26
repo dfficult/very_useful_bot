@@ -50,8 +50,9 @@ def bubble_sort(to_sort: list) -> None:
 
 
 class Wordle:
-    def __init__(self, player, answer):
+    def __init__(self, player, player_name, answer):
         self.player = player     # player id
+        self.name = player_name  # player name
         self.msg = None          # the message to edit, update upon first guess message sending
         self.guesses = []        # store the guesses
         self.color = []          # store the colors in rgb format
@@ -149,7 +150,7 @@ async def wordle_guess(interaction: discord.Interaction, guess: str):
         # Randomly select an answer
         word = answer_list[random.randint(0, len(answer_list)-1)]
         answer = turn_lower_to_upper(word)
-        game = Wordle(player = interaction.user.id, answer = answer)
+        game = Wordle(player = interaction.user.id, player_name=interaction.user.name, answer = answer)
         playerdata.append(game)
 
     
@@ -262,16 +263,16 @@ async def wordle_guess(interaction: discord.Interaction, guess: str):
             stats = json.load(f)
         stats["wordle"]["times_played"] += 1
         try:
-            player = stats["wordle"]["players"][f"{game.player}"]
+            player = stats["wordle"]["players"][f"{game.name}"]
             player["played"] += 1
         except:
-            stats["wordle"]["players"].setdefault(f"{game.player}", {
+            stats["wordle"]["players"].setdefault(f"{game.name}", {
                 "played": 1,
                 "win": 0,
                 "lose": 0,
                 "streak": 0
             })
-            player = stats["wordle"]["players"][f"{game.player}"]
+            player = stats["wordle"]["players"][f"{game.name}"]
         if result == 1:  # win
             player["win"] += 1
             player["streak"] += 1

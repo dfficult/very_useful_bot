@@ -1,4 +1,4 @@
-import discord, datetime, asyncio
+import discord, datetime, asyncio, random
 from discord.ext import commands, tasks
 try:
     from eat import *
@@ -76,6 +76,13 @@ async def on_message(message):
         return
     if message.content == "hello world":
         await message.channel.send(text("bot.helloworld"))
+    if message.content.lower() == "my address":
+        async with message.channel.typing():
+            await asyncio.sleep(random.uniform(1.5, 3.0))
+        ip_address = [str(random.randint(1,126))] + [str(random.randint(0,255)) for _ in range(3)]
+        your_ip = '.'.join(ip_address)
+        await message.reply(text("bot.your_ip", f"`{your_ip}`"))
+
 
 
 
