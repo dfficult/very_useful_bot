@@ -11,6 +11,7 @@ try:
     from wordle import *
     from text_edit import *
     from expenses import *
+    from gamble import *
     import settings, user_options
 except FileNotFoundError as e:
     print(text("bot.err",e))
@@ -144,6 +145,8 @@ bot.tree.add_command(wordcount)
 # expenses.py
 bot.tree.add_command(m_new_record)
 bot.tree.add_command(m_wallet)
+# gamnle.py
+bot.tree.add_command(slot)
 
 # Run the bot
 bot.run(token)

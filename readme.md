@@ -1,6 +1,6 @@
 # very_useful_bot
-[v1.7.1](#changelog)  
-2025.4.26  
+[v1.7.2](#changelog)  
+2025.05.08  
 
 如同名稱，這是一個非常有用的Discord機器人，以下是主打的功能：
 
@@ -50,8 +50,8 @@ python3 main.py
 VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有簡易的指令說明  
 輸入`/help`會產生Github連結，導向這個頁面
 
-### Wordle
-[`/wordle`](manual/wordle.md)
+### 遊戲
+[`/wordle`](manual/wordle.md) `/slot`
 
 ### 工具
 `/calculator` `/daysleft`
@@ -81,10 +81,11 @@ VeryUsefulBot採用斜線指令(Slash Command) `/`，只要輸入 `/`，就有�
 
 ## Changelog
 
-Latest: 1.7.1
+Latest: 1.7.2
 
 ### v1.7 Big Update
-- [1.7.1]() Added history to Expense Tracking System, New easter egg, Fixed Wordle Missing Record
+- [1.7.2]() Added Slot Machine
+- [1.7.1](https://github.com/dfficult/very_useful_bot/commit/00c1d9cba497b517cf1feb8ba8ef59868bf5f974) Added history to Expense Tracking System, New easter egg, Fixed Wordle Missing Record
 - [1.7.0.02](https://github.com/dfficult/very_useful_bot/commit/61ddf75cf6abfefde6802f8673843e8e07e79efa) Fixed common_deg_to_rad bug, Updated Readme.md
 - [1.7.0.01](https://github.com/dfficult/very_useful_bot/commit/a60013b8a61c26aa785df2b15287c331e3bce235) Fixed Wordle Fatal Bug, Updated Readme.md
 - [1.7.0](https://github.com/dfficult/very_useful_bot/commit/dcff8de13117bb927f6a0a1edba376a4f5115d81) Multi-Language Support, Expense Tracking System, Right Click Menu, Wordle Send Fix, New Math Command, User Option
