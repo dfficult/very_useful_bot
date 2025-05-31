@@ -10,13 +10,11 @@
     "bot.token_notfound": "找不到 Token, 請輸入 Token 或按 [Enter] 離開",
     "bot.token_entered": "你輸入了: {}",
     "bot.token_confirm": "你確定要使用並儲存此 Token 嗎? [y/n] ",
-    "bot.login": "{0} 已成功登入，並已載入{1}個指令",
+    "bot.login": "{} 已成功登入",
     "bot.helloworld": "Hello World!",
-    "bot.your_ip": "你的IP地址為：{}",
-
-    "cmd.help.description": "所有指令說明",
-    "cmd.help.title": "請前往 VeryUsefulBot 說明頁面",
-    "cmd.help.text":"https://www.github.com/dfficult/very_useful_bot",
+    "bot.cog_loaded": "已載入擴充指令：{}",
+    "bot.cog_load_error": "未載入擴充指令：{0}\n錯誤：{1}",
+    "bot.cogs_load_count": "已載入 {0} 個擴充指令，未載入 {1} 個擴充指令",
 
     "cmd.option.description": "[選項] 變更個人指令選項",
     "cmd.option.not_exist": "Key `{}` 不存在。",
@@ -134,11 +132,6 @@
     "cmd.eat.description": "[隨機] 從食物清單中挑選出一種食物",
     "cmd.amount": "輸入數量",
 
-    "cmd.addfood.description": "[隨機] 新增食物到食物清單",
-    "cmd.addfood.food": "食物",
-    "cmd.addfood.success": "成功新增{}",
-    "cmd.addfood.exist": "{}已存在",
-
     "flashcard.previous": "上一個",
     "flashcard.toggle": "中/英",
     "flashcard.next": "下一個",
@@ -150,17 +143,12 @@
 
     "calculator.backspace": "⌫",
     "calculator.clear_all": "AC",
-    "calculator.banned": "{}，您已被永久禁止使用計算機",
-    "calculator.banned_reason": "違反服務條款：嘗試將數字除以0",
 
     "cmd.calculator.description": "[計算機] 開啟計算機",
-    "cmd.calculator.banned": "您已被永久禁止使用計算機",
 
     "menu.evaluate": "計算",
     "menu.evaluate.fail": "無法計算此內容: \n{}",
 
-    "wordle.not_eng": "非英文",
-    "wordle.bubble_sort": "氣泡排序",
     "wordle.not_english": "{} 包含非英文字元",
     "wordle.quit": "QUIT",
     "wordle.quit_game": "答案是{}，已結束遊戲",
@@ -225,6 +213,16 @@
     "cmd.m_new_record.balance": "餘額",
     "cmd.m_new_record.amount": "金額",
     "cmd.m_new_record.des": "內容",
+
+    "cmd.slot.description": "[MiniGame] Slot Machine",
+    "cmd.slot.again": "再玩一次",
+    "cmd.slot.title": "Slot Machine",
+    "cmd.slot.jackpot": "Jackpot!",
+    "cmd.slot.win": "獲得獎金",
+    "cmd.slot.win_two": "中兩個",
+    "cmd.slot.lose": "你輸了",
+
+
 
     "cmd.simfrac.description": "[分數] 約分分數",
     "cmd.simfrac.a": "分子",
