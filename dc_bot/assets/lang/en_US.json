@@ -12,9 +12,11 @@
     "bot.token_confirm": "Are you sure you want to save and use this token? [y/n] ",
     "bot.login": "{} logged in successfully.",
     "bot.helloworld": "Hello World!",
-    "bot.cog_loaded": "Command module loaded:{}",
-    "bot.cog_load_error": "[ERROR] Error while loading:{0}\nError:{1}",
-    "bot.cogs_load_count": "Loaded {0} command modules, {1} command module(s) not loaded.",
+    "bot.cog_loaded": "Packages loaded:{}",
+    "bot.cog_load_error": "[ERROR] Error while loading:{0}\nError: {1}",
+    "bot.cogs_load_count": "Loaded {0} packages, {1} packages not loaded.",
+    "bot.commands_synced": "{} Commands synced successfully.",
+    "bot.commands_sync_error": "[ERROR] Failed to sync commands.\nError: {0}",
 
     "cmd.option.description": "[Option] Change user option",
     "cmd.option.not_exist": "Key `{}` does not exist.",
@@ -349,5 +351,8 @@
     "cmd.invrmtx2.inverse": "Inverse: ",
 
     "cmd.common_deg_to_rad.description": "[Trigonometry] Degree to Radius (Common Ones)",
-    "cmd.common_deg_to_rad.angle": "Angle in Degree"
+    "cmd.common_deg_to_rad.angle": "Angle in Degree",
+
+    "menu.quotify": "Quotify",
+    "menu.quotify.no_content": "No content to quote"
 }

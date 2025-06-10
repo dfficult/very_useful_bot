@@ -1,7 +1,16 @@
 # ChangeLog
 
 ### v1.8 2025六月更新
-- [v1.8.0]() (2025.5.31) Switched to Cog, Added Quotify, and some changes
+- [1.8.1]() (2025.6.10) Added a tutorial on developing VeryUsefulBot, Fixes on Quotify, Synced commands
+    - 新增：開發 VeryUsefulBot 的教學 (部分)
+    - 更改：可以從 `settings.py` 修改 Bot Activity 的類型，不用到 `main.py` 修改
+    - 更改：將cog檔案的載入顯示訊息由**指令模組(command modules)**改為**程式套件(packages)**
+    - 修復：指令現在會同步到客戶端，部分更名的指令可以使用
+    - 修復：Quotify 的作者修正為訊息的作者，非使用指令的作者
+    - 修復：Quotify 可以讀取 Embed 裡的內容
+    - 修復：`menu.quotify` 原沒有對應的顯示文字，現在加上，名為**Quotify**
+
+- [1.8.0](https://github.com/dfficult/very_useful_bot/releases/tag/v1.8.0) (2025.5.31) Switched to Cog, Added Quotify, and some changes
     - 新增： `Quotify` : 將一段話做成引文圖片
     - 新增：英文語言檔案 
     - 更改：此版本使用Cog架構重新編寫程式架構  

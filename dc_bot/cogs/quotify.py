@@ -16,7 +16,7 @@ class Quotify(commands.Cog):
 
 @app_commands.context_menu(name=text("menu.quotify"))
 async def quotify(interaction: discord.Interaction, message: discord.Message):
-    user = interaction.user
+    user = message.author
     url = user.display_avatar.replace(size=256).url
 
     async with aiohttp.ClientSession() as session:
@@ -77,8 +77,16 @@ async def quotify(interaction: discord.Interaction, message: discord.Message):
         return lines
 
     # Content
+    quote_text = message.content
+    if not quote_text and message.embeds:
+        embed = message.embeds[0]
+        quote_text = embed.description or embed.title or ""
+    if not quote_text:
+        await interaction.response.send_message(text("menu.quotify.no_content"))
+        return
+
     text1_max_w = WIDTH - AVATAR_SIZE - PADDING * 3
-    wrapped = wrap(f'"{message.content}"', font1, text1_max_w)
+    wrapped = wrap(f'"{quote_text}"', font1, text1_max_w)
     text_content = "\n".join(wrapped)
     draw1 = ImageDraw.Draw(background)
     text1_w, text1_h = draw1.textsize(text_content, font=font1)

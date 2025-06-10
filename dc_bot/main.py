@@ -44,9 +44,28 @@ async def on_ready():
                 print(text("bot.cog_load_error", filename, e))
                 loaded_failed += 1
     print(text("bot.cogs_load_count", loaded_commands, loaded_failed))
+    # Sync Commands
+    try:
+        synced = await bot.tree.sync()
+        print(text("bot.commands_synced", len(synced)))
+    except Exception as e:
+        print(text("bot.commands_sync_error", e))
+    # Logged in successfully
     print(text("bot.login", bot.user.name))
     # Set bot status
-    await bot.change_presence(activity=settings.Activity.playing)
+    match settings.Activity.doing:
+        case "watching":
+            activity = discord.Activity(type=discord.ActivityType.watching, name=settings.Activity.content)
+            await bot.change_presence(activity=activity)
+        case "playing":
+            activity = discord.Game(name=settings.Activity.content)
+            await bot.change_presence(activity=activity)
+        case "listening":
+            activity = activity=discord.Activity(type=discord.ActivityType.listening, name=settings.Activity.content)
+            await bot.change_presence(activity=activity)
+        case _:
+            pass
+    
 
 
 # Easter eggs

@@ -4,8 +4,7 @@ import settings and access by settings.xxx
 """
 import discord
 
-Version = ""
-TOKEN = ""
+Version = "1.8.1"
 LANG = "zh_TW"
 class Colors:
     notice = discord.Color.dark_magenta()
@@ -18,8 +17,6 @@ class Colors:
     fail = discord.Color.red()
     success = discord.Color.green()
 class Activity:
-    content = "Wordle"
-    watching = discord.Activity(type=discord.ActivityType.watching, name=content)
-    playing = discord.Game(name=content)
-    listening = activity=discord.Activity(type=discord.ActivityType.listening, name=content)
+    content = "WWDC 2025 — June 9 | Apple"
+    doing = "watching"  # watching, playing, listening
     

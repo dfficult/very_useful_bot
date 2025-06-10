@@ -12,9 +12,11 @@
     "bot.token_confirm": "你確定要使用並儲存此 Token 嗎? [y/n] ",
     "bot.login": "{} 已成功登入",
     "bot.helloworld": "Hello World!",
-    "bot.cog_loaded": "已載入擴充指令：{}",
-    "bot.cog_load_error": "未載入擴充指令：{0}\n錯誤：{1}",
-    "bot.cogs_load_count": "已載入 {0} 個擴充指令，未載入 {1} 個擴充指令",
+    "bot.cog_loaded": "已載入程式套件：{}",
+    "bot.cog_load_error": "未載入程式套件：{0}\n錯誤：{1}",
+    "bot.cogs_load_count": "已載入 {0} 個程式套件，未載入 {1} 個程式套件",
+    "bot.commands_synced": "{} 個指令已同步",
+    "bot.commands_sync_error": "同步指令失敗\n錯誤：{}",
 
     "cmd.option.description": "[選項] 變更個人指令選項",
     "cmd.option.not_exist": "Key `{}` 不存在。",
@@ -349,5 +351,8 @@
     "cmd.invrmtx2.inverse": "反矩陣",
 
     "cmd.common_deg_to_rad.description": "[三角函數] 常用角度(deg)轉弧度(rad)",
-    "cmd.common_deg_to_rad.angle": "角度"
+    "cmd.common_deg_to_rad.angle": "角度",
+
+    "menu.quotify": "Quotify",
+    "menu.quotify.no_content": "沒有內容可以引用"
 }
